@@ -1,0 +1,3173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Connect - Student Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #475569;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border);
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-content.large {
+            max-width: 900px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* User Profile Badge */
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-profile-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Avatar Picker Styles */
+        .avatar-picker {
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-picker label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+        }
+
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected::after {
+            content: '✓';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: var(--success);
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .avatar-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .avatar-preview-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .avatar-preview-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .avatar-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-grade {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Calendar Styles */
+        .calendar {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--primary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            padding: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .calendar-day.today {
+            background: var(--primary);
+            font-weight: 700;
+        }
+
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .calendar-day.inactive {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Group Posts */
+        .post-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .post-author-info h5 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .post-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .post-action:hover {
+            color: var(--primary);
+        }
+
+        .post-action.liked {
+            color: var(--primary);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1.25rem;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .quiz-progress-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .quiz-progress-dot.completed {
+            background: var(--success);
+        }
+
+        .quiz-progress-dot.wrong {
+            background: var(--danger);
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .quiz-score {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-feedback {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Video Player */
+        .video-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+        }
+
+        .video-placeholder .play-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .video-placeholder .play-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .video-details h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Group Detail View */
+        .group-detail-header {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .group-detail-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .group-detail-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .group-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .group-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .group-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .group-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .welcome-name {
+            display: block;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--gradient-4);
+            color: #064e3b;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Schedule Page */
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .schedule-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .session-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .session-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .session-card.live {
+            border-left-color: var(--danger);
+        }
+
+        .session-card.group {
+            border-left-color: #a855f7;
+        }
+
+        .session-time {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .session-time .time {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .session-time .date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .session-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .session-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-live {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .badge-upcoming {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .badge-group {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        /* Dashboard */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .activity-list {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: background 0.3s;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h5 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-details p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Resources */
+        .resource-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .resource-grid {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .resource-grid.active {
+            display: grid;
+        }
+
+        .resource-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resource-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--secondary);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-type {
+            padding: 0.375rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .type-video {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .type-quiz {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        .type-lesson {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .type-download {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .resource-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            flex: 1;
+        }
+
+        .resource-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Peer Learning */
+        .study-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .group-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .group-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .group-members {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .member-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--bg-secondary);
+            margin-left: -12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .member-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .group-info {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Profile Page */
+        .profile-header {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: var(--gradient-1);
+            opacity: 0.3;
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--bg-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .session-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .session-meta {
+                justify-content: center;
+            }
+
+            .session-card .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .profile-stats {
+                gap: 1.5rem;
+            }
+
+            .user-info-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login/Signup Modal -->
+    <div id="welcomeModal" class="modal active">
+        <div class="modal-content">
+            <h2>Welcome to Tutor Connect!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Let's personalize your learning experience</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event); return false;">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="username" placeholder="Enter your name">
+                </div>
+
+                <div class="avatar-picker">
+                    <label>Choose Your Avatar</label>
+                    <div class="avatar-grid" id="signupAvatarGrid"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="text" id="emailPhone" placeholder="email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+
+                <div class="form-group">
+                    <label>Select Your Grade</label>
+                    <select id="gradeSelect">
+                        <option value="9">9th Grade (Freshman)</option>
+                        <option value="6">6th Grade</option>
+                        <option value="7">7th Grade</option>
+                        <option value="8">8th Grade</option>
+                        <option value="10">10th Grade (Sophomore)</option>
+                        <option value="11">11th Grade (Junior)</option>
+                        <option value="12">12th Grade (Senior)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Primary Subject Focus</label>
+                    <select id="subjectSelect">
+                        <option value="math">Mathematics</option>
+                        <option value="english">English & Reading</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Get Started</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeQuizModal()">&times;</button>
+            <div id="quizContent"></div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeVideoModal()">&times;</button>
+            <div id="videoContent"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="showPage('home')">Tutor Connect</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#schedule" class="nav-link" data-page="schedule">Schedule</a></li>
+                <li><a href="#dashboard" class="nav-link" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#resources" class="nav-link" data-page="resources">Resources</a></li>
+                <li><a href="#peer-learning" class="nav-link" data-page="peer-learning">Peer Learning</a></li>
+            </ul>
+            <div class="user-profile-badge" onclick="showPage('profile')">
+                <div class="user-avatar" id="navUserAvatar">?</div>
+                <div class="user-info-text">
+                    <div class="user-name" id="navUserName">Guest</div>
+                    <div class="user-grade" id="navUserGrade">Not logged in</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" id="logoutBtn" onclick="logout()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page-section active">
+            <div class="hero">
+                <span class="welcome-name" id="heroWelcome">Welcome back!</span>
+                <h1>Tutor Connect</h1>
+                <p>Your ultimate student learning hub for academic success. Connect with tutors, track your progress, and learn together.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showPage('schedule')">Browse Sessions</button>
+                    <button class="btn btn-secondary" onclick="showPage('resources')">Explore Resources</button>
+                </div>
+            </div>
+
+            <div class="grid grid-4">
+                <div class="card" onclick="showPage('schedule')">
+                    <div class="card-icon" style="background: var(--gradient-1);">📅</div>
+                    <h3>Live Tutoring</h3>
+                    <p>Join one-on-one or group tutoring sessions with expert tutors across all subjects and grade levels.</p>
+                </div>
+                <div class="card" onclick="showPage('dashboard')">
+                    <div class="card-icon" style="background: var(--gradient-2);">📊</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your learning journey with detailed analytics, completed activities, and achievement tracking.</p>
+                </div>
+                <div class="card" onclick="showPage('resources')">
+                    <div class="card-icon" style="background: var(--gradient-3);">📚</div>
+                    <h3>Rich Resources</h3>
+                    <p>Access interactive lessons, educational videos, practice quizzes, and downloadable study materials.</p>
+                </div>
+                <div class="card" onclick="showPage('peer-learning')">
+                    <div class="card-icon" style="background: var(--gradient-4);">👥</div>
+                    <h3>Peer Learning</h3>
+                    <p>Connect with fellow students, join study groups, and collaborate on assignments and projects.</p>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top: 4rem;">
+                <h2>Upcoming Sessions</h2>
+                <p>Your next scheduled tutoring sessions</p>
+            </div>
+            <div id="upcomingSessionsHome"></div>
+        </div>
+
+        <!-- Schedule Page -->
+        <div id="schedule" class="page-section">
+            <div class="schedule-header">
+                <div>
+                    <h2>Learning Sessions</h2>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">Book your next tutoring session or join a study group</p>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="live">Live Now</button>
+                    <button class="filter-tab" data-filter="one-on-one">1-on-1</button>
+                    <button class="filter-tab" data-filter="group">Group Study</button>
+                </div>
+            </div>
+
+            <div id="sessionsList"></div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page-section">
+            <div class="section-header">
+                <h2>Your Dashboard</h2>
+                <p>Track your learning progress and achievements</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--primary);" id="statSessions">0</div>
+                    <div class="stat-label">Sessions Completed</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressSessions" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--secondary);" id="statHours">0</div>
+                    <div class="stat-label">Hours of Learning</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressHours" style="width: 0%; background: var(--gradient-3);"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--success);" id="statQuizScore">0%</div>
+                    <div class="stat-label">Average Quiz Score</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressQuiz" style="width: 0%; background: var(--gradient-4);"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color: var(--accent);" id="statAchievements">0</div>
+                    <div class="stat-label">Achievements Earned</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressAchievements" style="width: 0%; background: var(--gradient-2);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="activity-list">
+                    <h3 style="margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif;">Recent Activities</h3>
+                    <div id="recentActivities"></div>
+                </div>
+
+                <div class="activity-list">
+                    <h3 style="margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif;">Learning Goals</h3>
+                    <div id="learningGoals"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Page -->
+        <div id="resources" class="page-section">
+            <div class="section-header">
+                <h2>Learning Resources</h2>
+                <p>Interactive tools, lessons, videos, quizzes, and study materials</p>
+            </div>
+
+            <div class="resource-categories" id="resourceCategories">
+                <div class="category-card" onclick="showResources('math')">
+                    <div class="category-icon" style="background: var(--gradient-1);">🔢</div>
+                    <h3>Mathematics</h3>
+                    <p>Algebra, Geometry, Calculus, Statistics</p>
+                </div>
+                <div class="category-card" onclick="showResources('english')">
+                    <div class="category-icon" style="background: var(--gradient-2);">📖</div>
+                    <h3>English & Reading</h3>
+                    <p>Literature, Grammar, Writing, Comprehension</p>
+                </div>
+                <div class="category-card" onclick="showResources('science')">
+                    <div class="category-icon" style="background: var(--gradient-3);">🔬</div>
+                    <h3>Science</h3>
+                    <p>Biology, Chemistry, Physics, Earth Science</p>
+                </div>
+                <div class="category-card" onclick="showResources('history')">
+                    <div class="category-icon" style="background: var(--gradient-4);">🌍</div>
+                    <h3>History</h3>
+                    <p>World History, US History, Geography</p>
+                </div>
+            </div>
+
+            <div id="resourcesContainer"></div>
+        </div>
+
+        <!-- Peer Learning Page -->
+        <div id="peer-learning" class="page-section">
+            <div class="section-header">
+                <h2>Peer Learning</h2>
+                <p>Connect with fellow students and collaborate on your learning journey</p>
+            </div>
+
+            <div style="margin-bottom: 3rem;">
+                <h3 style="font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem;">Active Study Groups</h3>
+                <div class="study-groups" id="studyGroupsList"></div>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 3rem;">
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 1rem;">Create Your Own Study Group</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Can't find the right group? Start your own and invite classmates to join you in collaborative learning!
+                </p>
+                <button class="btn btn-primary" onclick="showToast('Feature coming soon!', 'success')">+ Create Study Group</button>
+            </div>
+        </div>
+
+        <!-- Group Detail Page -->
+        <div id="group-detail" class="page-section">
+            <button class="back-btn" onclick="showPage('peer-learning')">← Back to Study Groups</button>
+
+            <div class="group-detail-header">
+                <h1 class="group-detail-title" id="groupDetailTitle">Group Name</h1>
+                <p id="groupDetailDescription" style="color: var(--text-secondary); margin-bottom: 1.5rem;"></p>
+                <div class="group-detail-meta">
+                    <span>👥 <span id="groupMemberCount">0</span> members</span>
+                    <span id="groupSchedule"></span>
+                    <span id="groupSubject"></span>
+                </div>
+                <div class="group-members" id="groupDetailMembers" style="margin-bottom: 1rem;"></div>
+            </div>
+
+            <div class="group-tabs">
+                <button class="group-tab active" data-tab="discussion">Discussion</button>
+                <button class="group-tab" data-tab="calendar">Calendar</button>
+                <button class="group-tab" data-tab="resources">Resources</button>
+                <button class="group-tab" data-tab="members">Members</button>
+            </div>
+
+            <div id="discussion" class="tab-content active">
+                <div style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <textarea id="newPostContent" placeholder="Share something with your group..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addGroupPost()">Post</button>
+                </div>
+                <div id="groupPosts"></div>
+            </div>
+
+            <div id="calendar" class="tab-content">
+                <div class="calendar" id="groupCalendar"></div>
+            </div>
+
+            <div id="resources-tab" class="tab-content">
+                <div class="grid grid-3" id="groupResources"></div>
+            </div>
+
+            <div id="members" class="tab-content">
+                <div class="grid grid-4" id="groupMembersList"></div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile" class="page-section">
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatar">?</div>
+                <h2 class="profile-name" id="profileName">Guest User</h2>
+                <p class="profile-details" id="profileDetails">Not logged in</p>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileSessions">0</div>
+                        <div class="profile-stat-label">Sessions</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileHours">0</div>
+                        <div class="profile-stat-label">Hours</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profileGroups">0</div>
+                        <div class="profile-stat-label">Groups</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">Edit Profile</h3>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="profileNameInput" placeholder="Your name">
+                    </div>
+                    <div class="avatar-picker">
+                        <label>Change Avatar</label>
+                        <div class="avatar-preview" id="profileAvatarPreview">
+                            <div class="avatar-preview-icon" id="profileAvatarPreviewIcon"></div>
+                            <div class="avatar-preview-text">Select a new avatar below</div>
+                        </div>
+                        <div class="avatar-grid" id="profileAvatarGrid"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profileEmailInput" placeholder="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="profileGradeSelect">
+                            <option value="6">6th Grade</option>
+                            <option value="7">7th Grade</option>
+                            <option value="8">8th Grade</option>
+                            <option value="9">9th Grade (Freshman)</option>
+                            <option value="10">10th Grade (Sophomore)</option>
+                            <option value="11">11th Grade (Junior)</option>
+                            <option value="12">12th Grade (Senior)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Primary Subject</label>
+                        <select id="profileSubjectSelect">
+                            <option value="math">Mathematics</option>
+                            <option value="english">English & Reading</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
+                        <button class="btn btn-danger" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;">Achievements</h3>
+                    <div id="profileAchievements"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+
+        // User Data
+        // Avatar Options - Creative Characters
+        const avatars = [
+            { id: 1, emoji: '🦊', bg: 'linear-gradient(135deg, #ff9a56 0%, #ff6b35 100%)', name: 'Fox' },
+            { id: 2, emoji: '🐼', bg: 'linear-gradient(135deg, #a8e6cf 0%, #56ab91 100%)', name: 'Panda' },
+            { id: 3, emoji: '🦁', bg: 'linear-gradient(135deg, #ffd93d 0%, #ff9500 100%)', name: 'Lion' },
+            { id: 4, emoji: '🐰', bg: 'linear-gradient(135deg, #ffc4d6 0%, #ff8fab 100%)', name: 'Bunny' },
+            { id: 5, emoji: '🦉', bg: 'linear-gradient(135deg, #a18cd1 0%, #7c4dff 100%)', name: 'Owl' },
+            { id: 6, emoji: '🐸', bg: 'linear-gradient(135deg, #56ab91 0%, #2ecc71 100%)', name: 'Frog' },
+            { id: 7, emoji: '🦋', bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', name: 'Butterfly' },
+            { id: 8, emoji: '🐙', bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', name: 'Octopus' },
+            { id: 9, emoji: '🦄', bg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', name: 'Unicorn' },
+            { id: 10, emoji: '🐉', bg: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', name: 'Dragon' },
+            { id: 11, emoji: '🚀', bg: 'linear-gradient(135deg, #0c3483 0%, #6b8dd6 100%)', name: 'Rocket' },
+            { id: 12, emoji: '🌟', bg: 'linear-gradient(135deg, #f5af19 0%, #f12711 100%)', name: 'Star' },
+            { id: 13, emoji: '🎨', bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', name: 'Artist' },
+            { id: 14, emoji: '🎮', bg: 'linear-gradient(135deg, #4776e6 0%, #8e54e9 100%)', name: 'Gamer' },
+            { id: 15, emoji: '📚', bg: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)', name: 'Scholar' },
+            { id: 16, emoji: '🔬', bg: 'linear-gradient(135deg, #0575e6 0%, #00f260 100%)', name: 'Scientist' },
+            { id: 17, emoji: '🎵', bg: 'linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)', name: 'Music' },
+            { id: 18, emoji: '⚡', bg: 'linear-gradient(135deg, #f7971e 0%, #ffd200 100%)', name: 'Lightning' }
+        ];
+
+        let selectedAvatarId = 1; // Default avatar
+
+        let userData = {
+            name: '',
+            email: '',
+            grade: '',
+            subject: '',
+            avatarId: 1,
+            sessionsCompleted: 24,
+            hoursLearned: 18.5,
+            avgQuizScore: 87,
+            achievements: 12,
+            joinedGroups: [],
+            quizScores: []
+        };
+
+        // Sessions Data
+        const sessions = [
+            {
+                id: 1,
+                title: 'Algebra Fundamentals',
+                tutor: 'Ms. Sarah Johnson',
+                subject: 'Mathematics',
+                time: '3:00 PM',
+                date: 'Today',
+                type: 'one-on-one',
+                status: 'live',
+                spots: null
+            },
+            {
+                id: 2,
+                title: 'Essay Writing Workshop',
+                tutor: 'Mr. David Chen',
+                subject: 'English',
+                time: '4:30 PM',
+                date: 'Today',
+                type: 'group',
+                status: 'upcoming',
+                spots: 3
+            },
+            {
+                id: 3,
+                title: 'Biology: Cell Division',
+                tutor: 'Dr. Emily Roberts',
+                subject: 'Science',
+                time: '10:00 AM',
+                date: 'Tomorrow',
+                type: 'one-on-one',
+                status: 'upcoming',
+                spots: null
+            },
+            {
+                id: 4,
+                title: 'World War II Discussion',
+                tutor: 'Prof. Michael Brown',
+                subject: 'History',
+                time: '2:00 PM',
+                date: 'Tomorrow',
+                type: 'group',
+                status: 'upcoming',
+                spots: 8
+            },
+            {
+                id: 5,
+                title: 'Calculus Problem Solving',
+                tutor: 'Ms. Lisa Wang',
+                subject: 'Mathematics',
+                time: '11:00 AM',
+                date: 'Jan 31',
+                type: 'one-on-one',
+                status: 'upcoming',
+                spots: null
+            },
+            {
+                id: 6,
+                title: 'Chemistry Lab Prep',
+                tutor: 'Dr. James Miller',
+                subject: 'Science',
+                time: '1:00 PM',
+                date: 'Jan 31',
+                type: 'group',
+                status: 'upcoming',
+                spots: 5
+            }
+        ];
+
+        // Study Groups Data
+        const studyGroups = [
+            {
+                id: 1,
+                name: 'Calculus Warriors',
+                subject: 'Advanced Mathematics',
+                description: 'Tackling AP Calculus together! Weekly problem-solving sessions and exam prep.',
+                fullDescription: 'A dedicated group for AP Calculus students. We meet twice a week to work through challenging problems, share study resources, and prepare for exams together.',
+                members: [
+                    { name: 'Alex Johnson', avatarId: 1 },
+                    { name: 'Sarah Kim', avatarId: 7 },
+                    { name: 'Marcus Reed', avatarId: 11 },
+                    { name: 'Taylor Chen', avatarId: 3 }
+                ],
+                memberCount: 7,
+                schedule: 'Meets Tu/Th',
+                status: 'active',
+                posts: [
+                    { author: 'Alex Johnson', avatarId: 1, content: 'Just uploaded my notes from today\'s integration practice. Check the resources tab!', time: '2 hours ago', likes: 5, comments: 3 },
+                    { author: 'Sarah Kim', avatarId: 7, content: 'Who\'s ready for the quiz on Friday? Let\'s do a study session Thursday night!', time: '5 hours ago', likes: 8, comments: 6 }
+                ],
+                calendarEvents: [4, 6, 11, 13, 18, 20, 25, 27]
+            },
+            {
+                id: 2,
+                name: 'Chemistry Lab Partners',
+                subject: 'Science',
+                description: 'Collaborative group for lab report reviews and chemistry concept discussions.',
+                fullDescription: 'Perfect for chemistry students who want help with lab reports, understanding reactions, and preparing for tests. We have flexible meeting times.',
+                members: [
+                    { name: 'Laura Chen', avatarId: 2 },
+                    { name: 'James Wilson', avatarId: 9 },
+                    { name: 'Diana Martinez', avatarId: 14 }
+                ],
+                memberCount: 3,
+                schedule: 'Flexible',
+                status: 'open',
+                posts: [
+                    { author: 'Laura Chen', avatarId: 2, content: 'Anyone else confused about the titration lab? Let\'s discuss!', time: '1 day ago', likes: 4, comments: 7 }
+                ],
+                calendarEvents: [5, 12, 19, 26]
+            },
+            {
+                id: 3,
+                name: 'History Buffs',
+                subject: 'World History',
+                description: 'Exploring world history through discussions, presentations, and collaborative projects.',
+                fullDescription: 'We dive deep into historical events, analyze primary sources, and help each other with essays and projects. Great for AP History students!',
+                members: [
+                    { name: 'Ryan Park', avatarId: 5 },
+                    { name: 'Emma King', avatarId: 12 },
+                    { name: 'Noah Harris', avatarId: 6 },
+                    { name: 'Ben Santos', avatarId: 15 }
+                ],
+                memberCount: 6,
+                schedule: 'Mon/Wed',
+                status: 'study',
+                posts: [
+                    { author: 'Ryan Park', avatarId: 5, content: 'Finished my timeline project on the Cold War. Happy to share my research!', time: '3 hours ago', likes: 12, comments: 4 },
+                    { author: 'Emma King', avatarId: 12, content: 'Great discussion today on the causes of WWI. Thanks everyone!', time: '1 day ago', likes: 9, comments: 2 }
+                ],
+                calendarEvents: [3, 5, 10, 12, 17, 19, 24, 26]
+            },
+            {
+                id: 4,
+                name: 'English Literature Circle',
+                subject: 'English',
+                description: 'Book discussions, essay peer reviews, and poetry analysis sessions.',
+                fullDescription: 'For students who love literature! We discuss assigned readings, review each other\'s essays, and explore poetry together.',
+                members: [
+                    { name: 'Sophie Martinez', avatarId: 4 },
+                    { name: 'Kevin Lee', avatarId: 13 },
+                    { name: 'Fiona Peters', avatarId: 8 },
+                    { name: 'Amy Hughes', avatarId: 16 }
+                ],
+                memberCount: 4,
+                schedule: 'Friday',
+                status: 'active',
+                posts: [
+                    { author: 'Sophie Martinez', avatarId: 4, content: 'This week we\'re analyzing "The Great Gatsby". Who\'s read chapters 1-3?', time: '4 hours ago', likes: 6, comments: 8 }
+                ],
+                calendarEvents: [7, 14, 21, 28]
+            },
+            {
+                id: 5,
+                name: 'Physics Problem Solvers',
+                subject: 'Science',
+                description: 'Working through challenging physics problems and preparing for AP exams together.',
+                fullDescription: 'A supportive group for physics students tackling difficult concepts. We work through problem sets together and explain solutions step by step.',
+                members: [
+                    { name: 'Victor Mendez', avatarId: 10 },
+                    { name: 'Tina Garcia', avatarId: 18 },
+                    { name: 'Leo Brown', avatarId: 17 }
+                ],
+                memberCount: 4,
+                schedule: 'Sat/Sun',
+                status: 'open',
+                posts: [
+                    { author: 'Victor Mendez', avatarId: 10, content: 'Weekend session this Saturday at 2 PM. We\'ll cover momentum and collisions!', time: '6 hours ago', likes: 7, comments: 5 }
+                ],
+                calendarEvents: [1, 2, 8, 9, 15, 16, 22, 23]
+            },
+            {
+                id: 6,
+                name: 'Algebra Study Squad',
+                subject: 'Mathematics',
+                description: 'Homework help, practice problems, and test preparation for Algebra I & II.',
+                fullDescription: 'Whether you\'re struggling with algebra or want to get ahead, this group is for you! Daily help sessions and lots of practice problems.',
+                members: [
+                    { name: 'Chris Roberts', avatarId: 1 },
+                    { name: 'Jenny Park', avatarId: 7 },
+                    { name: 'Will Stevens', avatarId: 9 },
+                    { name: 'Mia Foster', avatarId: 3 }
+                ],
+                memberCount: 8,
+                schedule: 'Daily',
+                status: 'study',
+                posts: [
+                    { author: 'Chris Roberts', avatarId: 1, content: 'Posting solutions to tonight\'s homework. Check if your answers match!', time: '30 minutes ago', likes: 15, comments: 12 },
+                    { author: 'Jenny Park', avatarId: 7, content: 'Thanks everyone for helping me understand quadratics!', time: '2 hours ago', likes: 8, comments: 3 }
+                ],
+                calendarEvents: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26]
+            }
+        ];
+
+        // Resources Data
+        const resourcesData = {
+            math: [
+                { title: 'Quadratic Equations Made Easy', type: 'video', description: 'Learn how to solve quadratic equations using factoring, completing the square, and the quadratic formula.' },
+                { title: 'Geometry Practice Quiz', type: 'quiz', description: 'Test your knowledge of triangles, angles, and geometric proofs with this interactive quiz.', quizId: 'geometry' },
+                { title: 'Algebra Study Guide', type: 'download', description: 'Comprehensive study guide covering all essential algebra topics with examples and practice problems.' },
+                { title: 'Introduction to Calculus', type: 'lesson', description: 'Interactive lesson covering limits, derivatives, and basic integration concepts.' },
+                { title: 'Statistics & Probability', type: 'video', description: 'Understanding mean, median, mode, and probability distributions through real-world examples.' },
+                { title: 'Trigonometry Worksheet', type: 'download', description: 'Practice problems for sine, cosine, tangent, and trigonometric identities.' }
+            ],
+            english: [
+                { title: 'Poetry Analysis Techniques', type: 'lesson', description: 'Learn to analyze poetry using literary devices, themes, and contextual understanding.' },
+                { title: 'Grammar Fundamentals Quiz', type: 'quiz', description: 'Test your understanding of parts of speech, sentence structure, and punctuation.', quizId: 'grammar' },
+                { title: 'Essay Writing Guide', type: 'download', description: 'Step-by-step guide to writing compelling essays with proper structure and argumentation.' },
+                { title: 'Reading Comprehension Strategies', type: 'video', description: 'Improve your reading speed and comprehension with proven techniques and exercises.' },
+                { title: 'Shakespeare Simplified', type: 'lesson', description: 'Understanding Shakespeare\'s language, themes, and major works through interactive content.' },
+                { title: 'Vocabulary Builder Pack', type: 'download', description: '500+ essential vocabulary words with definitions, usage examples, and practice exercises.' }
+            ],
+            science: [
+                { title: 'Cell Biology Explained', type: 'video', description: 'Explore cell structure, organelles, and cellular processes through 3D animations.' },
+                { title: 'Chemistry Lab Safety Quiz', type: 'quiz', description: 'Essential safety protocols and procedures for working in a chemistry laboratory.', quizId: 'labsafety' },
+                { title: 'Physics Formula Sheet', type: 'download', description: 'Complete reference guide of physics formulas for mechanics, electricity, and thermodynamics.' },
+                { title: 'Periodic Table Interactive', type: 'lesson', description: 'Interactive periodic table with element properties, electron configurations, and trends.' },
+                { title: 'Ecosystem Dynamics', type: 'video', description: 'Understanding food chains, energy flow, and ecological relationships in ecosystems.' },
+                { title: 'Scientific Method Workbook', type: 'download', description: 'Practice designing experiments and applying the scientific method to real scenarios.' }
+            ],
+            history: [
+                { title: 'American Revolution Timeline', type: 'lesson', description: 'Interactive timeline covering key events, battles, and figures of the Revolutionary War.' },
+                { title: 'World War II Quiz', type: 'quiz', description: 'Test your knowledge of WWII causes, major battles, and historical significance.', quizId: 'ww2' },
+                { title: 'Ancient Civilizations Guide', type: 'download', description: 'Comprehensive overview of Egypt, Greece, Rome, and Mesopotamian civilizations.' },
+                { title: 'Civil Rights Movement', type: 'video', description: 'Documentary exploring key events and leaders of the Civil Rights Movement.' },
+                { title: 'Geography & Map Skills', type: 'lesson', description: 'Learn to read maps, understand coordinates, and analyze geographic patterns.' },
+                { title: 'US Constitution Study Pack', type: 'download', description: 'Complete guide to the Constitution, Bill of Rights, and amendments with analysis.' }
+            ]
+        };
+
+        // Quiz Data
+        const quizzes = {
+            geometry: {
+                title: 'Geometry Practice Quiz',
+                questions: [
+                    { question: 'What is the sum of angles in a triangle?', options: ['90°', '180°', '270°', '360°'], correct: 1 },
+                    { question: 'A quadrilateral has how many sides?', options: ['3', '4', '5', '6'], correct: 1 },
+                    { question: 'What is the Pythagorean theorem?', options: ['a + b = c', 'a² + b² = c²', 'a × b = c', 'a - b = c'], correct: 1 },
+                    { question: 'What type of angle is 90 degrees?', options: ['Acute', 'Obtuse', 'Right', 'Straight'], correct: 2 },
+                    { question: 'What is the area formula for a circle?', options: ['πr', '2πr', 'πr²', 'πd'], correct: 2 }
+                ]
+            },
+            grammar: {
+                title: 'Grammar Fundamentals Quiz',
+                questions: [
+                    { question: 'Which is a proper noun?', options: ['city', 'London', 'building', 'river'], correct: 1 },
+                    { question: 'What type of word describes a verb?', options: ['Adjective', 'Adverb', 'Noun', 'Pronoun'], correct: 1 },
+                    { question: 'Which sentence is correct?', options: ['Their going home', 'They\'re going home', 'There going home', 'Theyre going home'], correct: 1 },
+                    { question: 'What punctuation ends a question?', options: ['Period', 'Comma', 'Question mark', 'Exclamation'], correct: 2 },
+                    { question: 'Which is a conjunction?', options: ['quickly', 'and', 'beautiful', 'jumped'], correct: 1 }
+                ]
+            },
+            labsafety: {
+                title: 'Chemistry Lab Safety Quiz',
+                questions: [
+                    { question: 'What should you always wear in the lab?', options: ['Sandals', 'Safety goggles', 'Shorts', 'Jewelry'], correct: 1 },
+                    { question: 'Where should you dispose of chemicals?', options: ['Sink', 'Trash can', 'Designated containers', 'Floor drain'], correct: 2 },
+                    { question: 'What do you do if chemicals splash in your eyes?', options: ['Rub them', 'Use the eyewash station', 'Ignore it', 'Splash water'], correct: 1 },
+                    { question: 'When should you eat or drink in the lab?', options: ['During breaks', 'When hungry', 'Never', 'If careful'], correct: 2 },
+                    { question: 'What should you do with long hair in the lab?', options: ['Leave it down', 'Tie it back', 'Cut it', 'Cover with a hat'], correct: 1 }
+                ]
+            },
+            ww2: {
+                title: 'World War II Quiz',
+                questions: [
+                    { question: 'When did World War II begin?', options: ['1935', '1939', '1941', '1945'], correct: 1 },
+                    { question: 'What event brought the US into WWII?', options: ['D-Day', 'Pearl Harbor', 'Battle of Britain', 'Fall of France'], correct: 1 },
+                    { question: 'Who were the Axis powers?', options: ['US, UK, USSR', 'Germany, Italy, Japan', 'France, Poland, Belgium', 'China, India, Australia'], correct: 1 },
+                    { question: 'What was D-Day?', options: ['German surrender', 'Allied invasion of Normandy', 'Pearl Harbor attack', 'End of the war'], correct: 1 },
+                    { question: 'When did WWII end?', options: ['1943', '1944', '1945', '1946'], correct: 2 }
+                ]
+            }
+        };
+
+        // Activities Data
+        const activities = [
+            { icon: '✓', iconBg: 'rgba(99, 102, 241, 0.2)', iconColor: '#818cf8', title: 'Completed Quiz: Algebra Basics', detail: 'Score: 92% • 2 hours ago' },
+            { icon: '📹', iconBg: 'rgba(239, 68, 68, 0.2)', iconColor: '#f87171', title: 'Watched: Photosynthesis Explained', detail: 'Biology • 5 hours ago' },
+            { icon: '📝', iconBg: 'rgba(16, 185, 129, 0.2)', iconColor: '#34d399', title: 'Attended: English Literature Session', detail: 'Poetry Analysis • Yesterday' },
+            { icon: '⭐', iconBg: 'rgba(245, 158, 11, 0.2)', iconColor: '#fbbf24', title: 'Achievement Unlocked: Study Streak', detail: '5 days in a row • 2 days ago' },
+            { icon: '📚', iconBg: 'rgba(168, 85, 247, 0.2)', iconColor: '#c084fc', title: 'Downloaded: Study Guide - American Revolution', detail: 'History • 3 days ago' }
+        ];
+
+        // Learning Goals
+        const learningGoals = [
+            { title: 'Master Quadratic Equations', progress: 70, detail: 'Progress: 7/10 lessons completed' },
+            { title: 'Complete Chemistry Unit 3', progress: 50, detail: 'Progress: 4/8 topics covered', gradient: 'var(--gradient-3)' },
+            { title: 'Improve Reading Comprehension', progress: 80, detail: 'Progress: 12/15 exercises done', gradient: 'var(--gradient-4)' },
+            { title: 'World War II Timeline', progress: 83, detail: 'Progress: 5/6 chapters studied', gradient: 'var(--gradient-2)' }
+        ];
+
+        // Achievements
+        const achievements = [
+            { icon: '🏆', name: 'First Steps', description: 'Completed your first session' },
+            { icon: '🔥', name: '5-Day Streak', description: 'Studied 5 days in a row' },
+            { icon: '📚', name: 'Bookworm', description: 'Read 10 resources' },
+            { icon: '🎯', name: 'Quiz Master', description: 'Scored 100% on a quiz' },
+            { icon: '👥', name: 'Team Player', description: 'Joined your first study group' },
+            { icon: '⏰', name: 'Early Bird', description: 'Attended a morning session' }
+        ];
+
+        // ==================== FUNCTIONS ====================
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toastIcon.textContent = type === 'success' ? '✓' : '✕';
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Login Form Handler
+        function handleLogin(e) {
+            if (e) e.preventDefault();
+
+            userData.name = document.getElementById('username').value || 'Student';
+            userData.email = document.getElementById('emailPhone').value || 'student@example.com';
+            userData.grade = document.getElementById('gradeSelect').value || '9';
+            userData.subject = document.getElementById('subjectSelect').value || 'math';
+            userData.avatarId = selectedAvatarId;
+
+            document.getElementById('welcomeModal').classList.remove('active');
+            updateUI();
+            showToast(`Welcome, ${userData.name}!`);
+            return false;
+        }
+
+        // Logout Function
+        function logout() {
+            // Reset user data
+            userData.name = '';
+            userData.email = '';
+            userData.grade = '';
+            userData.subject = '';
+            userData.avatarId = 1;
+            userData.joinedGroups = [];
+            userData.quizScores = [];
+
+            // Reset avatar selection
+            selectedAvatarId = 1;
+
+            // Reset form fields
+            document.getElementById('username').value = '';
+            document.getElementById('emailPhone').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('gradeSelect').selectedIndex = 0;
+            document.getElementById('subjectSelect').selectedIndex = 0;
+
+            // Re-render avatar grids with default selection
+            renderAvatarGrid('signupAvatarGrid', selectSignupAvatar);
+
+            // Reset nav UI with default avatar
+            const defaultAvatar = avatars[0];
+            document.getElementById('navUserAvatar').innerHTML = defaultAvatar.emoji;
+            document.getElementById('navUserAvatar').style.background = defaultAvatar.bg;
+            document.getElementById('navUserName').textContent = 'Guest';
+            document.getElementById('navUserGrade').textContent = 'Not logged in';
+            document.getElementById('heroWelcome').textContent = 'Welcome!';
+
+            // Show login modal
+            document.getElementById('welcomeModal').classList.add('active');
+
+            // Go back to home page
+            showPage('home');
+
+            showToast('You have been logged out', 'success');
+        }
+
+        // Attach form handler
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
+
+        // Update UI with user data
+        function updateUI() {
+            const gradeText = getGradeText(userData.grade);
+            const subjectText = getSubjectText(userData.subject);
+            const avatar = avatars.find(a => a.id === userData.avatarId) || avatars[0];
+
+            // Nav Avatar
+            const navAvatar = document.getElementById('navUserAvatar');
+            navAvatar.innerHTML = avatar.emoji;
+            navAvatar.style.background = avatar.bg;
+            document.getElementById('navUserName').textContent = userData.name;
+            document.getElementById('navUserGrade').textContent = `${gradeText} • ${subjectText}`;
+
+            // Hero
+            document.getElementById('heroWelcome').textContent = `Welcome back, ${userData.name.split(' ')[0]}!`;
+
+            // Profile Avatar
+            const profileAvatar = document.getElementById('profileAvatar');
+            profileAvatar.innerHTML = avatar.emoji;
+            profileAvatar.style.background = avatar.bg;
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileDetails').textContent = `${gradeText} • ${subjectText} • ${userData.email}`;
+            document.getElementById('profileNameInput').value = userData.name;
+            document.getElementById('profileEmailInput').value = userData.email;
+            document.getElementById('profileGradeSelect').value = userData.grade;
+            document.getElementById('profileSubjectSelect').value = userData.subject;
+            document.getElementById('profileSessions').textContent = userData.sessionsCompleted;
+            document.getElementById('profileHours').textContent = userData.hoursLearned;
+            document.getElementById('profileGroups').textContent = userData.joinedGroups.length;
+
+            // Profile Avatar Preview
+            const previewIcon = document.getElementById('profileAvatarPreviewIcon');
+            if (previewIcon) {
+                previewIcon.innerHTML = avatar.emoji;
+                previewIcon.style.background = avatar.bg;
+            }
+
+            // Update profile avatar grid selection
+            renderAvatarGrid('profileAvatarGrid', selectProfileAvatar, userData.avatarId);
+
+            // Dashboard stats
+            document.getElementById('statSessions').textContent = userData.sessionsCompleted;
+            document.getElementById('statHours').textContent = userData.hoursLearned;
+            document.getElementById('statQuizScore').textContent = userData.avgQuizScore + '%';
+            document.getElementById('statAchievements').textContent = userData.achievements;
+
+            document.getElementById('progressSessions').style.width = Math.min(userData.sessionsCompleted * 3, 100) + '%';
+            document.getElementById('progressHours').style.width = Math.min(userData.hoursLearned * 4, 100) + '%';
+            document.getElementById('progressQuiz').style.width = userData.avgQuizScore + '%';
+            document.getElementById('progressAchievements').style.width = Math.min(userData.achievements * 8, 100) + '%';
+        }
+
+        function getGradeText(grade) {
+            const grades = {
+                '6': '6th Grade', '7': '7th Grade', '8': '8th Grade',
+                '9': 'Freshman', '10': 'Sophomore', '11': 'Junior', '12': 'Senior'
+            };
+            return grades[grade] || 'Student';
+        }
+
+        function getSubjectText(subject) {
+            const subjects = {
+                'math': 'Mathematics', 'english': 'English', 'science': 'Science', 'history': 'History'
+            };
+            return subjects[subject] || 'General';
+        }
+
+        // Update Profile
+        function updateProfile() {
+            userData.name = document.getElementById('profileNameInput').value;
+            userData.email = document.getElementById('profileEmailInput').value;
+            userData.grade = document.getElementById('profileGradeSelect').value;
+            userData.subject = document.getElementById('profileSubjectSelect').value;
+
+            updateUI();
+            showToast('Profile updated successfully!');
+        }
+
+        // Navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.classList.add('active');
+            }
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            window.scrollTo(0, 0);
+
+            if (pageId === 'dashboard') {
+                animateProgressBars();
+            }
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(link.dataset.page);
+            });
+        });
+
+        // Render Sessions
+        function renderSessions(filter = 'all') {
+            const container = document.getElementById('sessionsList');
+            const homeContainer = document.getElementById('upcomingSessionsHome');
+
+            let filtered = sessions;
+            if (filter === 'live') filtered = sessions.filter(s => s.status === 'live');
+            else if (filter === 'one-on-one') filtered = sessions.filter(s => s.type === 'one-on-one');
+            else if (filter === 'group') filtered = sessions.filter(s => s.type === 'group');
+
+            let html = '';
+            filtered.forEach(session => {
+                const statusBadge = session.status === 'live'
+                    ? '<span class="badge badge-live">● Live</span>'
+                    : '<span class="badge badge-upcoming">Upcoming</span>';
+
+                const typeBadge = session.type === 'group'
+                    ? '<span class="badge badge-group">Group</span>'
+                    : '';
+
+                const spotsText = session.spots ? `<span>🪑 ${session.spots} spots left</span>` : '';
+
+                html += `
+                    <div class="session-card ${session.status === 'live' ? 'live' : ''} ${session.type === 'group' ? 'group' : ''}">
+                        <div class="session-time">
+                            <div class="time">${session.time}</div>
+                            <div class="date">${session.date}</div>
+                        </div>
+                        <div class="session-info">
+                            <h4>${session.title}</h4>
+                            <div class="session-meta">
+                                <span>👤 ${session.tutor}</span>
+                                <span>📚 ${session.subject}</span>
+                                ${spotsText}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                            ${statusBadge}
+                            ${typeBadge}
+                            <button class="btn btn-primary btn-small" onclick="joinSession(${session.id})">
+                                ${session.status === 'live' ? 'Join Now' : 'Book'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // Show first 3 on home
+            let homeHtml = '';
+            sessions.slice(0, 3).forEach(session => {
+                const statusBadge = session.status === 'live'
+                    ? '<span class="badge badge-live">● Live</span>'
+                    : '<span class="badge badge-upcoming">Upcoming</span>';
+
+                homeHtml += `
+                    <div class="session-card ${session.status === 'live' ? 'live' : ''}">
+                        <div class="session-time">
+                            <div class="time">${session.time}</div>
+                            <div class="date">${session.date}</div>
+                        </div>
+                        <div class="session-info">
+                            <h4>${session.title}</h4>
+                            <div class="session-meta">
+                                <span>👤 ${session.tutor}</span>
+                                <span>📚 ${session.subject}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            ${statusBadge}
+                        </div>
+                    </div>
+                `;
+            });
+            homeContainer.innerHTML = homeHtml;
+        }
+
+        function joinSession(id) {
+            const session = sessions.find(s => s.id === id);
+            if (session) {
+                showToast(`${session.status === 'live' ? 'Joining' : 'Booked'}: ${session.title}`);
+            }
+        }
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderSessions(tab.dataset.filter);
+            });
+        });
+
+        // Render Study Groups
+        function renderStudyGroups() {
+            const container = document.getElementById('studyGroupsList');
+
+            let html = '';
+            studyGroups.forEach(group => {
+                const statusBadge = group.status === 'active'
+                    ? '<span class="badge badge-live">● Active</span>'
+                    : group.status === 'open'
+                    ? '<span class="badge badge-upcoming">Open</span>'
+                    : '<span class="badge badge-group">Study</span>';
+
+                let membersHtml = '';
+                group.members.forEach((member) => {
+                    const avatar = avatars.find(a => a.id === member.avatarId) || avatars[0];
+                    membersHtml += `<div class="member-avatar" style="background: ${avatar.bg};" title="${member.name}">${avatar.emoji}</div>`;
+                });
+                if (group.memberCount > group.members.length) {
+                    membersHtml += `<div class="member-avatar" style="background: rgba(255,255,255,0.2);">+${group.memberCount - group.members.length}</div>`;
+                }
+
+                const isJoined = userData.joinedGroups.includes(group.id);
+
+                html += `
+                    <div class="group-card">
+                        <div class="group-header">
+                            <div>
+                                <h4 style="font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem;">${group.name}</h4>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">${group.subject}</p>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <p>${group.description}</p>
+                        <div class="group-members">
+                            ${membersHtml}
+                        </div>
+                        <div class="group-info">
+                            <span>👥 ${group.memberCount} members</span>
+                            <span>📅 ${group.schedule}</span>
+                        </div>
+                        <button class="btn ${isJoined ? 'btn-success' : 'btn-primary'}" style="margin-top: 1rem; width: 100%;" onclick="joinGroup(${group.id})">
+                            ${isJoined ? '✓ View Group' : 'Join Group'}
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function joinGroup(groupId) {
+            if (!userData.joinedGroups.includes(groupId)) {
+                userData.joinedGroups.push(groupId);
+                showToast('Successfully joined the group!');
+            }
+            showGroupDetail(studyGroups.find(g => g.id === groupId));
+        }
+
+        function showGroupDetail(group) {
+            document.getElementById('groupDetailTitle').textContent = group.name;
+            document.getElementById('groupDetailDescription').textContent = group.fullDescription;
+            document.getElementById('groupMemberCount').textContent = group.memberCount;
+            document.getElementById('groupSchedule').innerHTML = `📅 ${group.schedule}`;
+            document.getElementById('groupSubject').innerHTML = `📚 ${group.subject}`;
+
+            // Members avatars
+            let membersHtml = '';
+            group.members.forEach((member) => {
+                const avatar = avatars.find(a => a.id === member.avatarId) || avatars[0];
+                membersHtml += `<div class="member-avatar" style="background: ${avatar.bg};" title="${member.name}">${avatar.emoji}</div>`;
+            });
+            document.getElementById('groupDetailMembers').innerHTML = membersHtml;
+
+            // Posts
+            generateGroupPosts(group);
+
+            // Calendar
+            generateGroupCalendar(group);
+
+            // Resources
+            generateGroupResources(group);
+
+            // Members list
+            generateMembersList(group);
+
+            // Store current group
+            window.currentGroup = group;
+
+            showPage('group-detail');
+        }
+
+        function generateGroupPosts(group) {
+            const container = document.getElementById('groupPosts');
+
+            let html = '';
+            group.posts.forEach((post) => {
+                const avatar = avatars.find(a => a.id === post.avatarId) || avatars[0];
+                html += `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-author-avatar" style="background: ${avatar.bg};">${avatar.emoji}</div>
+                            <div class="post-author-info">
+                                <h5>${post.author}</h5>
+                                <div class="post-time">${post.time}</div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-actions">
+                            <button class="post-action" onclick="likePost(this)">👍 ${post.likes} Like</button>
+                            <button class="post-action">💬 ${post.comments} Comments</button>
+                            <button class="post-action">↗️ Share</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function likePost(btn) {
+            if (!btn.classList.contains('liked')) {
+                btn.classList.add('liked');
+                const text = btn.textContent;
+                const num = parseInt(text.match(/\d+/)[0]);
+                btn.textContent = `👍 ${num + 1} Like`;
+            }
+        }
+
+        function addGroupPost() {
+            const content = document.getElementById('newPostContent').value.trim();
+            if (content && window.currentGroup) {
+                window.currentGroup.posts.unshift({
+                    author: userData.name,
+                    avatarId: userData.avatarId,
+                    content: content,
+                    time: 'Just now',
+                    likes: 0,
+                    comments: 0
+                });
+                generateGroupPosts(window.currentGroup);
+                document.getElementById('newPostContent').value = '';
+                showToast('Post added!');
+            }
+        }
+
+        function generateGroupCalendar(group) {
+            const container = document.getElementById('groupCalendar');
+            const today = new Date();
+            const currentDay = today.getDate();
+
+            let html = `
+                <div class="calendar-header">
+                    <h3 style="font-family: 'Outfit', sans-serif;">February 2026</h3>
+                    <div class="calendar-nav">
+                        <button>← Prev</button>
+                        <button>Next →</button>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+            `;
+
+            // February 2026 starts on Sunday
+            for (let i = 1; i <= 28; i++) {
+                const hasEvent = group.calendarEvents.includes(i);
+                const isToday = i === 30; // Simulated today
+                html += `<div class="calendar-day ${hasEvent ? 'has-event' : ''} ${isToday ? 'today' : ''}">${i}</div>`;
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function generateGroupResources(group) {
+            const container = document.getElementById('groupResources');
+            const subject = group.subject.toLowerCase().includes('math') ? 'math'
+                : group.subject.toLowerCase().includes('english') ? 'english'
+                : group.subject.toLowerCase().includes('science') ? 'science'
+                : 'history';
+
+            const resources = resourcesData[subject].slice(0, 3);
+
+            let html = '';
+            resources.forEach(resource => {
+                const typeClass = `type-${resource.type}`;
+                html += `
+                    <div class="resource-item">
+                        <div class="resource-header">
+                            <h4>${resource.title}</h4>
+                            <span class="resource-type ${typeClass}">${resource.type}</span>
+                        </div>
+                        <p>${resource.description}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function generateMembersList(group) {
+            const container = document.getElementById('groupMembersList');
+
+            let html = '';
+            group.members.forEach((member) => {
+                const avatar = avatars.find(a => a.id === member.avatarId) || avatars[0];
+                html += `
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <div class="user-avatar" style="background: ${avatar.bg}; width: 60px; height: 60px; font-size: 1.5rem; margin: 0 auto 1rem;">${avatar.emoji}</div>
+                        <h4>${member.name}</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Active Member</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Group Tab Switching
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('group-tab')) {
+                document.querySelectorAll('.group-tab').forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
+
+                const tabName = e.target.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                const tabId = tabName === 'resources' ? 'resources-tab' : tabName;
+                document.getElementById(tabId).classList.add('active');
+            }
+        });
+
+        // Resources
+        function showResources(subject) {
+            const container = document.getElementById('resourcesContainer');
+            const resources = resourcesData[subject];
+
+            document.getElementById('resourceCategories').style.display = 'none';
+
+            let html = `
+                <button class="back-btn" onclick="hideAllResources()">← Back to subjects</button>
+                <h3 style="font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem;">${getSubjectText(subject)} Resources</h3>
+                <div class="grid grid-3">
+            `;
+
+            resources.forEach(resource => {
+                const typeClass = `type-${resource.type}`;
+                const actionBtn = resource.type === 'quiz'
+                    ? `<button class="btn btn-primary btn-small" onclick="startQuiz('${resource.quizId}')">Start Quiz</button>`
+                    : resource.type === 'video'
+                    ? `<button class="btn btn-primary btn-small" onclick="openVideo('${resource.title}')">Watch Now</button>`
+                    : resource.type === 'download'
+                    ? `<button class="btn btn-secondary btn-small" onclick="downloadResource('${resource.title}')">Download</button>`
+                    : `<button class="btn btn-primary btn-small" onclick="startLesson('${resource.title}')">Start Lesson</button>`;
+
+                html += `
+                    <div class="resource-item">
+                        <div class="resource-header">
+                            <h4>${resource.title}</h4>
+                            <span class="resource-type ${typeClass}">${resource.type}</span>
+                        </div>
+                        <p>${resource.description}</p>
+                        <div class="resource-actions">
+                            ${actionBtn}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function hideAllResources() {
+            document.getElementById('resourceCategories').style.display = '';
+            document.getElementById('resourcesContainer').innerHTML = '';
+        }
+
+        function downloadResource(title) {
+            showToast(`Downloading: ${title}`);
+        }
+
+        function startLesson(title) {
+            showToast(`Starting lesson: ${title}`);
+        }
+
+        // Quiz System
+        let currentQuiz = null;
+        let currentQuestion = 0;
+        let quizAnswers = [];
+
+        function startQuiz(quizId) {
+            currentQuiz = quizzes[quizId];
+            currentQuestion = 0;
+            quizAnswers = [];
+
+            document.getElementById('quizModal').classList.add('active');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const container = document.getElementById('quizContent');
+            const quiz = currentQuiz;
+            const q = quiz.questions[currentQuestion];
+
+            let progressHtml = '<div class="quiz-progress">';
+            quiz.questions.forEach((_, i) => {
+                let dotClass = 'quiz-progress-dot';
+                if (i < currentQuestion) {
+                    dotClass += quizAnswers[i] === quiz.questions[i].correct ? ' completed' : ' wrong';
+                } else if (i === currentQuestion) {
+                    dotClass += ' active';
+                }
+                progressHtml += `<div class="${dotClass}"></div>`;
+            });
+            progressHtml += '</div>';
+
+            let optionsHtml = '';
+            q.options.forEach((opt, i) => {
+                optionsHtml += `<div class="quiz-option" onclick="selectQuizAnswer(${i})">${opt}</div>`;
+            });
+
+            container.innerHTML = `
+                <h2>${quiz.title}</h2>
+                ${progressHtml}
+                <div class="quiz-question">
+                    <h3>Question ${currentQuestion + 1}: ${q.question}</h3>
+                    <div class="quiz-options">
+                        ${optionsHtml}
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                    <button class="btn btn-secondary" onclick="closeQuizModal()">Exit Quiz</button>
+                    <button class="btn btn-primary" id="nextQuestionBtn" onclick="nextQuestion()" disabled>
+                        ${currentQuestion === quiz.questions.length - 1 ? 'See Results' : 'Next Question'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectQuizAnswer(index) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+                if (i === index) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            quizAnswers[currentQuestion] = index;
+            document.getElementById('nextQuestionBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const correct = currentQuiz.questions[currentQuestion].correct;
+            const options = document.querySelectorAll('.quiz-option');
+
+            options.forEach((opt, i) => {
+                if (i === correct) {
+                    opt.classList.add('correct');
+                } else if (i === quizAnswers[currentQuestion] && i !== correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion >= currentQuiz.questions.length) {
+                    showQuizResults();
+                } else {
+                    renderQuizQuestion();
+                }
+            }, 1000);
+        }
+
+        function showQuizResults() {
+            const quiz = currentQuiz;
+            let correct = 0;
+            quizAnswers.forEach((ans, i) => {
+                if (ans === quiz.questions[i].correct) correct++;
+            });
+
+            const score = Math.round((correct / quiz.questions.length) * 100);
+            userData.quizScores.push(score);
+            userData.avgQuizScore = Math.round(userData.quizScores.reduce((a, b) => a + b, 0) / userData.quizScores.length);
+            updateUI();
+
+            let feedback = '';
+            if (score >= 90) feedback = 'Excellent work! You\'re a star!';
+            else if (score >= 70) feedback = 'Great job! Keep practicing!';
+            else if (score >= 50) feedback = 'Good effort! Review the material!';
+            else feedback = 'Keep studying! You\'ll improve!';
+
+            const container = document.getElementById('quizContent');
+            container.innerHTML = `
+                <div class="quiz-result">
+                    <h2>${quiz.title}</h2>
+                    <div class="quiz-score">${score}%</div>
+                    <p class="quiz-feedback">${feedback}</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">You got ${correct} out of ${quiz.questions.length} questions correct!</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn btn-secondary" onclick="closeQuizModal()">Close</button>
+                        <button class="btn btn-primary" onclick="startQuiz('${Object.keys(quizzes).find(k => quizzes[k] === quiz)}')">Try Again</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quizModal').classList.remove('active');
+            currentQuiz = null;
+        }
+
+        // Video Modal
+        function openVideo(title) {
+            const container = document.getElementById('videoContent');
+
+            container.innerHTML = `
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <div class="video-placeholder">
+                            <div class="play-icon">▶</div>
+                            <p style="color: var(--text-secondary);">Video Player</p>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-details">
+                            <h3>${title}</h3>
+                            <div class="video-meta">
+                                <span>📺 15:32</span>
+                                <span>👁 2.4k views</span>
+                                <span>📅 Jan 2026</span>
+                            </div>
+                            <p style="color: var(--text-secondary);">This educational video covers all the essential concepts you need to master this topic. Watch, learn, and practice!</p>
+                        </div>
+                        <div class="video-actions">
+                            <button class="btn btn-primary" onclick="showToast('Video bookmarked!')">Bookmark</button>
+                            <button class="btn btn-secondary" onclick="showToast('Notes feature coming soon!')">Take Notes</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+
+        // Render Activities
+        function renderActivities() {
+            const container = document.getElementById('recentActivities');
+            let html = '';
+
+            activities.forEach(activity => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: ${activity.iconBg}; color: ${activity.iconColor};">${activity.icon}</div>
+                        <div class="activity-details">
+                            <h5>${activity.title}</h5>
+                            <p>${activity.detail}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Learning Goals
+        function renderLearningGoals() {
+            const container = document.getElementById('learningGoals');
+            let html = '';
+
+            learningGoals.forEach(goal => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-details">
+                            <h5>${goal.title}</h5>
+                            <p>${goal.detail}</p>
+                            <div class="progress-bar" style="margin-top: 0.75rem;">
+                                <div class="progress-fill" style="width: ${goal.progress}%; ${goal.gradient ? `background: ${goal.gradient};` : ''}"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Achievements
+        function renderAchievements() {
+            const container = document.getElementById('profileAchievements');
+            let html = '';
+
+            achievements.forEach(achievement => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(99, 102, 241, 0.2); font-size: 1.5rem;">${achievement.icon}</div>
+                        <div class="activity-details">
+                            <h5>${achievement.name}</h5>
+                            <p>${achievement.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Animate Progress Bars
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }
+
+        // Close modals on click outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Initialize
+        // Avatar Functions
+        function renderAvatarGrid(containerId, onSelectCallback, selectedId = 1) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            let html = '';
+            avatars.forEach(avatar => {
+                const isSelected = avatar.id === selectedId;
+                html += `
+                    <div class="avatar-option ${isSelected ? 'selected' : ''}"
+                         style="background: ${avatar.bg};"
+                         data-avatar-id="${avatar.id}"
+                         onclick="${onSelectCallback.name}(${avatar.id})"
+                         title="${avatar.name}">
+                        ${avatar.emoji}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function selectSignupAvatar(avatarId) {
+            selectedAvatarId = avatarId;
+
+            // Update visual selection
+            document.querySelectorAll('#signupAvatarGrid .avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (parseInt(opt.dataset.avatarId) === avatarId) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+
+        function selectProfileAvatar(avatarId) {
+            userData.avatarId = avatarId;
+
+            // Update visual selection
+            document.querySelectorAll('#profileAvatarGrid .avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (parseInt(opt.dataset.avatarId) === avatarId) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            // Update preview
+            const avatar = avatars.find(a => a.id === avatarId);
+            const previewIcon = document.getElementById('profileAvatarPreviewIcon');
+            if (previewIcon && avatar) {
+                previewIcon.innerHTML = avatar.emoji;
+                previewIcon.style.background = avatar.bg;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render avatar grids
+            renderAvatarGrid('signupAvatarGrid', selectSignupAvatar, 1);
+
+            renderSessions();
+            renderStudyGroups();
+            renderActivities();
+            renderLearningGoals();
+            renderAchievements();
+        });
+    </script>
+</body>
+</html>
