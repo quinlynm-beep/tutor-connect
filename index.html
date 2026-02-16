@@ -1336,6 +1336,830 @@
                 display: none;
             }
         }
+
+        /* Landing Page Styles */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 4rem 0;
+            min-height: 80vh;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            color: var(--primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Image Section */
+        .hero-image {
+            position: relative;
+            height: 500px;
+        }
+
+        .hero-circle {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-circle 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-circle {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.15;
+            }
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-card-icon {
+            font-size: 2rem;
+        }
+
+        .card-1 {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .card-2 {
+            top: 50%;
+            right: 5%;
+            animation-delay: 1s;
+        }
+
+        .card-3 {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            padding: 6rem 0;
+            background: var(--bg-secondary);
+            border-radius: 40px;
+            margin: 4rem 0;
+        }
+
+        .steps-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            flex: 1;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            margin: 1rem 0;
+        }
+
+        .step-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            background: var(--gradient-1);
+            border-radius: 30px;
+            padding: 4rem 2rem;
+        }
+
+        .cta-content h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .cta-content .btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-content .btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Landing Page */
+        @media (max-width: 968px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-image {
+                height: 300px;
+                margin-top: 2rem;
+            }
+
+            .hero-circle {
+                width: 250px;
+                height: 250px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-container {
+                flex-direction: column;
+            }
+
+            .step-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .floating-card {
+                padding: 0.75rem 1rem;
+            }
+
+            .floating-card-icon {
+                font-size: 1.5rem;
+            }
+
+            .floating-card-text {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Group Page Styles */
+        .group-page-header {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .group-page-header-top {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .group-page-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .group-page-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-page-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+        }
+
+        .group-page-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .group-page-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .group-page-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .member-card-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .member-card-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-card-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .upcoming-sessions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .session-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .session-item-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .session-item-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .resource-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .group-page-header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .group-page-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .member-list {
+                grid-template-columns: 1fr;
+            }
+
+            .session-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Personal Calendar Styles */
+        .personal-calendar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .calendar-event {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-event:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .calendar-event.video {
+            border-left-color: var(--danger);
+        }
+
+        .calendar-event.session {
+            border-left-color: var(--primary);
+        }
+
+        .calendar-event-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .calendar-event-details {
+            flex: 1;
+        }
+
+        .calendar-event-details h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .calendar-event-details p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .calendar-event-time {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        /* Bookmarks Styles */
+        .bookmarks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .bookmark-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bookmark-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bookmark-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .bookmark-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bookmark-info h5 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bookmark-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .bookmark-remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .bookmark-remove:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        /* Tutorial Overlay */
+        .tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-overlay.active {
+            display: flex;
+        }
+
+        .tutorial-spotlight {
+            position: absolute;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .tutorial-content {
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--primary);
+            text-align: center;
+            animation: tutorialPop 0.5s ease;
+        }
+
+        @keyframes tutorialPop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .tutorial-content h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tutorial-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .tutorial-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tutorial-steps {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .tutorial-step.active {
+            background: var(--primary);
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        .tutorial-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .personal-calendar {
+                grid-column: 1 / -1;
+            }
+
+            .calendar-event {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .calendar-event-time {
+                white-space: normal;
+            }
+
+            .calendar-bookmarks-row {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1354,7 +2178,8 @@
             </div>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" class="active" onclick="showSection('home')">Home</a></li>
+                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
                 <li><a href="#" onclick="showSection('sessions')">Sessions</a></li>
                 <li><a href="#" onclick="showSection('groups')">Study Groups</a></li>
                 <li><a href="#" onclick="showSection('resources')">Resources</a></li>
@@ -1374,8 +2199,140 @@
 
     <!-- Main Container -->
     <div class="container">
+        <!-- Home/Landing Section -->
+        <section id="home" class="section active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">✨ Welcome to the Future of Learning</div>
+                    <h1 class="hero-title">Master Any Subject with <span class="gradient-text">Expert Tutors</span></h1>
+                    <p class="hero-subtitle">Connect with top tutors, join study groups, and access unlimited learning resources—all in one place.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large" onclick="document.getElementById('signupModal').classList.add('active')">🚀 Get Started Free</button>
+                        <button class="btn btn-secondary btn-large" onclick="showSection('dashboard')">📚 Explore Dashboard</button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">10,000+</div>
+                            <div class="hero-stat-label">Active Students</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">500+</div>
+                            <div class="hero-stat-label">Expert Tutors</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">95%</div>
+                            <div class="hero-stat-label">Success Rate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="floating-card card-1">
+                        <div class="floating-card-icon">📚</div>
+                        <div class="floating-card-text">
+                            <div style="font-weight: 600;">1-on-1 Tutoring</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Personalized learning</div>
+                        </div>
+                    </div>
+                    <div class="floating-card card-2">
+                        <div class="floating-card-icon">👥</div>
+                        <div class="floating-card-text">
+                            <div style="font-weight: 600;">Study Groups</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Learn together</div>
+                        </div>
+                    </div>
+                    <div class="floating-card card-3">
+                        <div class="floating-card-icon">🎯</div>
+                        <div class="floating-card-text">
+                            <div style="font-weight: 600;">Track Progress</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">Achieve your goals</div>
+                        </div>
+                    </div>
+                    <div class="hero-circle"></div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section">
+                <div class="section-header">
+                    <h2 class="section-title">Everything You Need to Excel</h2>
+                    <p class="section-subtitle">Comprehensive tools and resources designed for student success</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">📖</div>
+                        <h3>Expert Tutoring</h3>
+                        <p>Connect with verified tutors across all subjects. Get personalized help when you need it.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">👥</div>
+                        <h3>Study Groups</h3>
+                        <p>Join peer learning groups, collaborate on assignments, and share knowledge with classmates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--accent);">📚</div>
+                        <h3>Resource Library</h3>
+                        <p>Access thousands of study materials, practice quizzes, and educational videos anytime.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(6, 182, 212, 0.2); color: var(--secondary);">📅</div>
+                        <h3>Smart Scheduling</h3>
+                        <p>Book sessions easily, manage your calendar, and never miss an important study session.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);">🎥</div>
+                        <h3>Live Sessions</h3>
+                        <p>Attend live tutoring sessions with real-time interaction and screen sharing capabilities.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">📊</div>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your improvement with detailed analytics, quiz scores, and achievement badges.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <div class="how-it-works-section">
+                <div class="section-header">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Get started in three simple steps</p>
+                </div>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">✍️</div>
+                        <h3>Create Your Account</h3>
+                        <p>Sign up in seconds and tell us about your learning goals and subjects of interest.</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🔍</div>
+                        <h3>Find Your Tutor</h3>
+                        <p>Browse our network of expert tutors or join study groups that match your needs.</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">🚀</div>
+                        <h3>Start Learning</h3>
+                        <p>Book sessions, access resources, and watch your grades improve with personalized support.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2>Ready to Transform Your Learning?</h2>
+                    <p>Join thousands of students already achieving their academic goals with TutorConnect.</p>
+                    <button class="btn btn-primary btn-large" onclick="document.getElementById('signupModal').classList.add('active')">🎓 Start Learning Today</button>
+                </div>
+            </div>
+        </section>
+
         <!-- Dashboard Section -->
-        <section id="dashboard" class="section active">
+        <section id="dashboard" class="section">
             <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 1rem;">Welcome back, <span id="welcomeName">Student</span>! 👋</h1>
             <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem;">Here's what's happening with your learning today</p>
 
@@ -1414,8 +2371,28 @@
                 </div>
             </div>
 
+            <!-- Personal Calendar & Bookmarks Row -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem;" class="calendar-bookmarks-row">
+                <!-- Personal Calendar -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📅 My Calendar</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openBookingModal()">+ Add Event</button>
+                    </div>
+                    <div id="personalCalendar"></div>
+                </div>
+
+                <!-- Bookmarks -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔖 Bookmarks</h3>
+                    </div>
+                    <div id="bookmarksContainer"></div>
+                </div>
+            </div>
+
             <!-- Recent Activities -->
-            <div style="margin-top: 3rem;">
+            <div style="margin-top: 2rem;">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Recent Activities</h3>
@@ -1798,6 +2775,42 @@
         </div>
     </div>
 
+    <!-- Group Page Modal -->
+    <div id="groupPageModal" class="modal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeGroupPage()">×</button>
+            <div id="groupPageContent"></div>
+        </div>
+    </div>
+
+    <!-- Session Details Modal -->
+    <div id="sessionDetailsModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSessionDetails()">×</button>
+            <div id="sessionDetailsContent"></div>
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorialOverlay" class="tutorial-overlay">
+        <div class="tutorial-content">
+            <div class="tutorial-icon" id="tutorialIcon">🎓</div>
+            <h2 id="tutorialTitle">Welcome to TutorConnect!</h2>
+            <p id="tutorialText">Let's take a quick tour to help you get started.</p>
+            <div class="tutorial-steps">
+                <div class="tutorial-step active"></div>
+                <div class="tutorial-step"></div>
+                <div class="tutorial-step"></div>
+                <div class="tutorial-step"></div>
+                <div class="tutorial-step"></div>
+            </div>
+            <div class="tutorial-buttons">
+                <button class="btn btn-secondary" onclick="skipTutorial()">Skip</button>
+                <button class="btn btn-primary" onclick="nextTutorial()">Next</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
@@ -1830,8 +2843,15 @@
             completedSessions: 0,
             quizScores: [],
             avgQuizScore: 0,
-            studyStreak: 0
+            studyStreak: 0,
+            hasSeenTutorial: false
         };
+
+        // Calendar Events
+        let calendarEvents = [];
+
+        // Bookmarks
+        let bookmarks = [];
 
         // Sessions Data
         let sessions = [
@@ -1902,7 +2922,7 @@
         ];
 
         // Activities Data
-        const activities = [
+        let activities = [
             {
                 icon: '✅',
                 title: 'Completed Algebra Quiz',
@@ -2120,6 +3140,215 @@
             hamburger.classList.remove('active');
         }
 
+        // Tutorial System
+        let tutorialStep = 0;
+        const tutorialSteps = [
+            {
+                icon: '🎓',
+                title: 'Welcome to TutorConnect!',
+                text: "Let's take a quick tour to help you get started with your learning journey."
+            },
+            {
+                icon: '📚',
+                title: 'Book Sessions',
+                text: 'Schedule one-on-one tutoring sessions with expert tutors in various subjects.'
+            },
+            {
+                icon: '👥',
+                title: 'Join Study Groups',
+                text: 'Connect with peers in study groups to learn together and share knowledge.'
+            },
+            {
+                icon: '📖',
+                title: 'Access Resources',
+                text: 'Download study materials, watch educational videos, and take practice quizzes.'
+            },
+            {
+                icon: '📅',
+                title: 'Track Your Progress',
+                text: 'Use your personal calendar and bookmarks to stay organized and achieve your goals!'
+            }
+        ];
+
+        function startTutorial() {
+            tutorialStep = 0;
+            updateTutorialContent();
+            document.getElementById('tutorialOverlay').classList.add('active');
+        }
+
+        function updateTutorialContent() {
+            const step = tutorialSteps[tutorialStep];
+            document.getElementById('tutorialIcon').textContent = step.icon;
+            document.getElementById('tutorialTitle').textContent = step.title;
+            document.getElementById('tutorialText').textContent = step.text;
+
+            // Update step indicators
+            const stepDots = document.querySelectorAll('.tutorial-step');
+            stepDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === tutorialStep);
+            });
+
+            // Update button text on last step
+            const nextBtn = document.querySelector('.tutorial-buttons .btn-primary');
+            nextBtn.textContent = tutorialStep === tutorialSteps.length - 1 ? 'Get Started!' : 'Next';
+        }
+
+        function nextTutorial() {
+            tutorialStep++;
+            if (tutorialStep >= tutorialSteps.length) {
+                skipTutorial();
+            } else {
+                updateTutorialContent();
+            }
+        }
+
+        function skipTutorial() {
+            document.getElementById('tutorialOverlay').classList.remove('active');
+            userData.hasSeenTutorial = true;
+        }
+
+        // Calendar Functions
+        function renderPersonalCalendar() {
+            const container = document.getElementById('personalCalendar');
+            
+            if (calendarEvents.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+                        <p>No upcoming events yet!</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="openBookingModal()">Book Your First Session</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="personal-calendar">';
+            calendarEvents.forEach(event => {
+                const iconBg = event.type === 'video' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(99, 102, 241, 0.2)';
+                const iconColor = event.type === 'video' ? 'var(--danger)' : 'var(--primary)';
+                
+                html += `
+                    <div class="calendar-event ${event.type}" onclick="openCalendarEvent('${event.id}')">
+                        <div class="calendar-event-icon" style="background: ${iconBg}; color: ${iconColor};">
+                            ${event.icon}
+                        </div>
+                        <div class="calendar-event-details">
+                            <h4>${event.title}</h4>
+                            <p>${event.description}</p>
+                        </div>
+                        <div class="calendar-event-time">
+                            ${event.date} • ${event.time}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function openCalendarEvent(eventId) {
+            const event = calendarEvents.find(e => e.id === eventId);
+            if (!event) return;
+
+            if (event.type === 'video') {
+                openVideo(event.title);
+            } else if (event.type === 'session') {
+                showToast('Opening session details...');
+            }
+        }
+
+        function addToCalendar(title, description, date, time, type, icon) {
+            const event = {
+                id: 'event_' + Date.now(),
+                title: title,
+                description: description,
+                date: date,
+                time: time,
+                type: type,
+                icon: icon
+            };
+            
+            calendarEvents.push(event);
+            renderPersonalCalendar();
+            updateDashboardActivities();
+        }
+
+        // Bookmarks Functions
+        function renderBookmarks() {
+            const container = document.getElementById('bookmarksContainer');
+            
+            if (bookmarks.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔖</div>
+                        <p style="font-size: 0.9rem;">No bookmarks yet!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="bookmarks-list">';
+            bookmarks.forEach(bookmark => {
+                html += `
+                    <div class="bookmark-item" onclick="openBookmark('${bookmark.id}')">
+                        <div class="bookmark-icon">${bookmark.icon}</div>
+                        <div class="bookmark-info">
+                            <h5>${bookmark.title}</h5>
+                            <p>${bookmark.type}</p>
+                        </div>
+                        <button class="bookmark-remove" onclick="event.stopPropagation(); removeBookmark('${bookmark.id}')">×</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function addBookmark(title, type, icon, data) {
+            const bookmark = {
+                id: 'bookmark_' + Date.now(),
+                title: title,
+                type: type,
+                icon: icon,
+                data: data
+            };
+            
+            bookmarks.push(bookmark);
+            renderBookmarks();
+            showToast('Bookmarked! 🔖');
+        }
+
+        function removeBookmark(bookmarkId) {
+            bookmarks = bookmarks.filter(b => b.id !== bookmarkId);
+            renderBookmarks();
+            showToast('Bookmark removed');
+        }
+
+        function openBookmark(bookmarkId) {
+            const bookmark = bookmarks.find(b => b.id === bookmarkId);
+            if (!bookmark) return;
+
+            if (bookmark.type === 'Video') {
+                openVideo(bookmark.title);
+            } else if (bookmark.type === 'Quiz') {
+                startQuiz(bookmark.data);
+            } else if (bookmark.type === 'Resource') {
+                downloadMaterial(bookmark.title, bookmark.data);
+            } else if (bookmark.type === 'Session' && bookmark.data && bookmark.data.sessionId) {
+                openSessionDetails(bookmark.data.sessionId);
+            }
+        }
+
+        // Update Dashboard Activities
+        function updateDashboardActivities() {
+            // This is called after completing activities to refresh the dashboard
+            renderActivities();
+            renderPersonalCalendar();
+            updateUI();
+        }
+
         // Signup Functions
         function completeSignup() {
             const name = document.getElementById('signupName').value;
@@ -2140,6 +3369,13 @@
             document.getElementById('signupModal').classList.remove('active');
             updateUI();
             showToast('Welcome to TutorConnect! 🎉');
+            
+            // Start tutorial for first-time users
+            if (!userData.hasSeenTutorial) {
+                setTimeout(() => {
+                    startTutorial();
+                }, 1000);
+            }
         }
 
         // Update UI
@@ -2221,6 +3457,16 @@
 
             sessions.unshift(newSession);
             userData.totalSessions++;
+
+            // Add to personal calendar
+            addToCalendar(
+                `${subject} Session`,
+                `With ${tutor}`,
+                formattedDate,
+                formattedTime,
+                'session',
+                '📚'
+            );
 
             closeBookingModal();
             renderSessions();
@@ -2359,6 +3605,21 @@
             // Cleanup
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+            
+            // Add to bookmarks
+            addBookmark(title, 'Resource', '📄', subject);
+            
+            // Add to activities
+            activities.unshift({
+                icon: '📥',
+                title: 'Downloaded Resource',
+                detail: title,
+                iconBg: 'rgba(6, 182, 212, 0.2)',
+                iconColor: 'var(--secondary)'
+            });
+            
+            if (activities.length > 5) activities.pop();
+            updateDashboardActivities();
             
             showToast(`Downloaded: ${title} 📥`);
         }
@@ -2632,9 +3893,13 @@ PROBLEM-SOLVING TIPS:
 
             if (!text) return;
 
-            const avatar = avatars.find(a => a.id === userData.avatarId);
+            // Use guest name if not logged in
+            const displayName = userData.name || 'Guest';
+            const avatarId = userData.avatarId || 1;
+            const avatar = avatars.find(a => a.id === avatarId);
+            
             const newComment = {
-                author: `${avatar.emoji} ${userData.name.split(' ')[0]}`,
+                author: `${avatar.emoji} ${displayName.split(' ')[0]}`,
                 time: 'Just now',
                 text: text
             };
@@ -2645,6 +3910,211 @@ PROBLEM-SOLVING TIPS:
             groupComments[groupId].push(newComment);
 
             renderComments(groupId);
+            showToast('Comment posted! 💬');
+        }
+
+        // Group Page Functions
+        function openGroupPage(groupId) {
+            const group = studyGroups.find(g => g.id === groupId);
+            if (!group) return;
+
+            // Generate member data
+            const members = [
+                { name: 'Sarah Johnson', role: 'Leader', avatar: avatars[0] },
+                { name: 'Mike Chen', role: 'Member', avatar: avatars[1] },
+                { name: 'Emily Rodriguez', role: 'Member', avatar: avatars[2] },
+                { name: 'David Kim', role: 'Member', avatar: avatars[3] },
+                { name: 'Alex Turner', role: 'Member', avatar: avatars[4] },
+                { name: 'Jordan Lee', role: 'Member', avatar: avatars[5] }
+            ];
+
+            // Generate upcoming sessions
+            const upcomingSessions = [
+                { day: 'Monday', date: 'Feb 17', time: group.time, topic: 'Problem Set Review' },
+                { day: 'Wednesday', date: 'Feb 19', time: group.time, topic: 'Practice Problems' },
+                { day: 'Friday', date: 'Feb 21', time: group.time, topic: 'Quiz Preparation' }
+            ];
+
+            // Generate resources
+            const resources = [
+                { name: 'Study Guide.pdf', type: 'PDF', icon: '📄', action: 'download' },
+                { name: 'Practice Problems.docx', type: 'Document', icon: '📝', action: 'download' },
+                { name: 'Introduction Video', type: 'Video', icon: '🎥', action: 'video' },
+                { name: 'Concept Tutorial', type: 'Video', icon: '📺', action: 'video' },
+                { name: 'Practice Quiz', type: 'Quiz', icon: '📊', action: 'quiz' },
+                { name: 'Final Assessment', type: 'Quiz', icon: '✍️', action: 'quiz' }
+            ];
+
+            const container = document.getElementById('groupPageContent');
+            container.innerHTML = `
+                <div class="group-page-header">
+                    <div class="group-page-header-top">
+                        <div class="group-page-icon" style="background: ${group.iconBg};">${group.icon}</div>
+                        <div class="group-page-title">
+                            <h2>${group.name}</h2>
+                            <div class="group-page-meta">
+                                <span>📚 ${group.subject}</span>
+                                <span>👥 ${group.members} members</span>
+                                <span>🕐 ${group.time}</span>
+                                <span>📅 ${group.meetDays.join(', ')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        A collaborative learning space for students interested in ${group.subject}. We meet regularly to discuss concepts, solve problems together, and support each other's learning journey.
+                    </p>
+                    <div class="group-page-actions">
+                        <button class="btn btn-primary" onclick="joinGroup(${group.id})">✅ Join This Group</button>
+                        <button class="btn btn-secondary" onclick="showToast('Notifications enabled! 🔔')">🔔 Get Notifications</button>
+                        <button class="btn btn-secondary" onclick="showToast('Group shared! 📤')">📤 Share Group</button>
+                    </div>
+                </div>
+
+                <div class="group-page-section">
+                    <h3>👥 Members (${group.members})</h3>
+                    <div class="member-list">
+                        ${members.map(member => `
+                            <div class="member-card">
+                                <div class="member-card-avatar" style="background: ${member.avatar.bg};">
+                                    ${member.avatar.emoji}
+                                </div>
+                                <div class="member-card-info">
+                                    <h4>${member.name}</h4>
+                                    <p>${member.role}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="group-page-section">
+                    <h3>📅 Upcoming Sessions</h3>
+                    <div class="upcoming-sessions">
+                        ${upcomingSessions.map(session => `
+                            <div class="session-item">
+                                <div class="session-item-info">
+                                    <div class="session-item-icon">📚</div>
+                                    <div>
+                                        <h4>${session.day}, ${session.date}</h4>
+                                        <p style="color: var(--text-secondary);">${session.topic}</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <span style="color: var(--text-secondary);">🕐 ${session.time}</span>
+                                    <button class="btn btn-secondary btn-sm" onclick="showToast('Added to calendar! 📅')">Add to Calendar</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="group-page-section">
+                    <h3>📁 Shared Resources</h3>
+                    <div class="resources-list">
+                        ${resources.map(resource => `
+                            <div class="resource-item" onclick="${
+                                resource.action === 'video' ? `openVideo('${resource.name}')` :
+                                resource.action === 'quiz' ? `startQuiz('${group.subject.toLowerCase()}')` :
+                                `showToast('Downloading ${resource.name}...')`
+                            }">
+                                <div class="resource-item-icon">${resource.icon}</div>
+                                <div>
+                                    <h4 style="font-size: 0.95rem;">${resource.name}</h4>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem;">${resource.type}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="group-page-section">
+                    <h3>💬 Group Discussion</h3>
+                    <div id="groupPageComments-${group.id}"></div>
+                </div>
+            `;
+
+            // Render comments in the group page
+            const commentsContainer = document.getElementById(`groupPageComments-${group.id}`);
+            const comments = groupComments[group.id] || [];
+
+            let commentsHtml = '';
+            comments.forEach(comment => {
+                commentsHtml += `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <div class="comment-avatar" style="background: var(--gradient-1);">${comment.author.split(' ')[0]}</div>
+                            <span class="comment-author">${comment.author.split(' ')[1]}</span>
+                            <span class="comment-time">${comment.time}</span>
+                        </div>
+                        <div class="comment-text">${comment.text}</div>
+                    </div>
+                `;
+            });
+
+            commentsHtml += `
+                <div class="comment-input">
+                    <input type="text" placeholder="Write a message..." id="groupPageNewComment-${group.id}">
+                    <button onclick="addGroupPageComment(${group.id})">Post</button>
+                </div>
+            `;
+
+            commentsContainer.innerHTML = commentsHtml;
+
+            document.getElementById('groupPageModal').classList.add('active');
+        }
+
+        function closeGroupPage() {
+            document.getElementById('groupPageModal').classList.remove('active');
+        }
+
+        function joinGroup(groupId) {
+            const group = studyGroups.find(g => g.id === groupId);
+            if (!group) return;
+
+            // Check if user is logged in
+            if (!userData.name || userData.name === '') {
+                showToast('⚠️ Please complete signup first to join groups');
+                closeGroupPage();
+                document.getElementById('signupModal').classList.add('active');
+                return;
+            }
+
+            showToast(`🎉 You've joined ${group.name}!`);
+            
+            // Update member count
+            group.members++;
+            renderStudyGroups();
+            
+            // Refresh the group page to show updated member count
+            setTimeout(() => {
+                openGroupPage(groupId);
+            }, 500);
+        }
+
+        function addGroupPageComment(groupId) {
+            const input = document.getElementById(`groupPageNewComment-${groupId}`);
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            // Use guest name if not logged in
+            const displayName = userData.name || 'Guest';
+            const avatarId = userData.avatarId || 1;
+            const avatar = avatars.find(a => a.id === avatarId);
+            
+            const newComment = {
+                author: `${avatar.emoji} ${displayName.split(' ')[0]}`,
+                time: 'Just now',
+                text: text
+            };
+
+            if (!groupComments[groupId]) {
+                groupComments[groupId] = [];
+            }
+            groupComments[groupId].push(newComment);
+
+            // Refresh the group page
+            openGroupPage(groupId);
             showToast('Comment posted! 💬');
         }
 
@@ -2691,15 +4161,176 @@ PROBLEM-SOLVING TIPS:
                         <div class="session-actions">
                             ${session.status === 'live' ? 
                                 '<button class="btn btn-primary" onclick="showLivePopup()">🎥 Join Now</button>' : 
-                                '<button class="btn btn-secondary">📝 View Details</button>'
+                                '<button class="btn btn-secondary" onclick="openSessionDetails(' + session.id + ')">📝 View Details</button>'
                             }
-                            ${session.status !== 'live' ? '<button class="btn btn-secondary">✏️ Edit</button>' : ''}
+                            ${session.status !== 'live' ? '<button class="btn btn-secondary" onclick="openSessionDetails(' + session.id + ')">✏️ Edit</button>' : ''}
                         </div>
                     </div>
                 `;
             });
 
             container.innerHTML = html;
+        }
+
+        // Session Details Functions
+        function openSessionDetails(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            const container = document.getElementById('sessionDetailsContent');
+            
+            // Check if session is already bookmarked
+            const isBookmarked = bookmarks.some(b => b.data && b.data.sessionId === sessionId);
+            const isInCalendar = calendarEvents.some(e => e.id === `session_${sessionId}`);
+
+            container.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="width: 80px; height: 80px; border-radius: 20px; background: rgba(99, 102, 241, 0.2); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1rem;">
+                        📚
+                    </div>
+                    <h2 style="margin-bottom: 0.5rem;">${session.subject}</h2>
+                    <span class="session-badge ${session.status === 'live' ? 'badge-live' : (session.booked ? 'badge-booked' : 'badge-upcoming')}">
+                        ${session.status === 'live' ? '🔴 Live Now' : (session.booked ? '✅ Booked' : '📅 Upcoming')}
+                    </span>
+                </div>
+
+                <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">📋 Session Details</h3>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(99, 102, 241, 0.2); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                👨‍🏫
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Tutor</div>
+                                <div style="font-weight: 600;">${session.tutor}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.2); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📅
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Date</div>
+                                <div style="font-weight: 600;">${session.date}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(245, 158, 11, 0.2); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                🕐
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Time</div>
+                                <div style="font-weight: 600;">${session.time}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(6, 182, 212, 0.2); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📖
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Topic</div>
+                                <div style="font-weight: 600;">${session.topic}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">💡 What to Expect</h3>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>One-on-one personalized tutoring session</li>
+                        <li>Interactive problem-solving and discussions</li>
+                        <li>Opportunity to ask questions and clarify doubts</li>
+                        <li>Practice problems and homework help</li>
+                        <li>Study tips and exam preparation strategies</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-card); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">📝 Preparation Tips</h3>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>Review related materials before the session</li>
+                        <li>Prepare specific questions you want to ask</li>
+                        <li>Have your textbook and notes ready</li>
+                        <li>Join the session 5 minutes early</li>
+                        <li>Test your internet connection beforehand</li>
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    ${!isBookmarked ? `
+                        <button class="btn btn-primary" onclick="bookmarkSession(${sessionId})" style="flex: 1;">
+                            🔖 Add to Bookmarks
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" disabled style="flex: 1; opacity: 0.7; cursor: not-allowed;">
+                            ✅ Bookmarked
+                        </button>
+                    `}
+                    ${!isInCalendar ? `
+                        <button class="btn btn-secondary" onclick="addSessionToCalendar(${sessionId})" style="flex: 1;">
+                            📅 Add to Calendar
+                        </button>
+                    ` : `
+                        <button class="btn btn-success" disabled style="flex: 1; opacity: 0.7; cursor: not-allowed;">
+                            ✅ In Calendar
+                        </button>
+                    `}
+                    ${session.status === 'live' ? `
+                        <button class="btn btn-primary" onclick="showLivePopup(); closeSessionDetails();" style="width: 100%;">
+                            🎥 Join Live Session
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('sessionDetailsModal').classList.add('active');
+        }
+
+        function closeSessionDetails() {
+            document.getElementById('sessionDetailsModal').classList.remove('active');
+        }
+
+        function bookmarkSession(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            addBookmark(
+                `${session.subject} Session`,
+                'Session',
+                '📚',
+                { sessionId: sessionId, type: 'session' }
+            );
+
+            // Refresh the modal to show updated bookmark status
+            openSessionDetails(sessionId);
+        }
+
+        function addSessionToCalendar(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            // Add to calendar with unique ID
+            const event = {
+                id: `session_${sessionId}`,
+                title: `${session.subject} Session`,
+                description: `With ${session.tutor} - ${session.topic}`,
+                date: session.date,
+                time: session.time,
+                type: 'session',
+                icon: '📚'
+            };
+            
+            calendarEvents.push(event);
+            renderPersonalCalendar();
+            showToast('Added to calendar! 📅');
+
+            // Refresh the modal to show updated calendar status
+            openSessionDetails(sessionId);
         }
 
         // Render Study Groups
@@ -2769,8 +4400,7 @@ PROBLEM-SOLVING TIPS:
                         </div>
 
                         <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" style="flex: 1;">Join Group</button>
-                            <button class="btn btn-secondary" style="flex: 1;">View Details</button>
+                            <button class="btn btn-primary" style="flex: 1;" onclick="openGroupPage(${group.id})">View Group Page</button>
                         </div>
                     </div>
                 `;
@@ -2866,7 +4496,23 @@ PROBLEM-SOLVING TIPS:
             const score = Math.round((correct / quiz.questions.length) * 100);
             userData.quizScores.push(score);
             userData.avgQuizScore = Math.round(userData.quizScores.reduce((a, b) => a + b, 0) / userData.quizScores.length);
-            updateUI();
+            
+            // Update completed activities
+            userData.completedSessions++;
+            
+            // Add activity to recent activities
+            activities.unshift({
+                icon: '✅',
+                title: 'Completed Quiz',
+                detail: `${quiz.title} - Scored ${score}%`,
+                iconBg: score >= 70 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                iconColor: score >= 70 ? 'var(--success)' : 'var(--accent)'
+            });
+            
+            // Keep only last 5 activities
+            if (activities.length > 5) activities.pop();
+            
+            updateDashboardActivities();
 
             let feedback = '';
             if (score >= 90) feedback = 'Excellent work! You\'re a star!';
@@ -2917,8 +4563,8 @@ PROBLEM-SOLVING TIPS:
                             <p style="color: var(--text-secondary);">This educational video covers all the essential concepts you need to master this topic. Watch, learn, and practice!</p>
                         </div>
                         <div class="video-actions">
-                            <button class="btn btn-primary" onclick="showToast('Video bookmarked!')">Bookmark</button>
-                            <button class="btn btn-secondary" onclick="showToast('Notes feature coming soon!')">Take Notes</button>
+                            <button class="btn btn-primary" onclick="addBookmark('${title}', 'Video', '🎥', 'video'); showToast('Video bookmarked! 🔖')">🔖 Bookmark</button>
+                            <button class="btn btn-secondary" onclick="addToCalendar('Watch: ${title}', 'Educational Video', 'Feb 20, 2026', '3:00 PM', 'video', '🎥'); showToast('Added to calendar! 📅')">📅 Watch Later</button>
                         </div>
                     </div>
                 </div>
@@ -3078,6 +4724,8 @@ PROBLEM-SOLVING TIPS:
             renderActivities();
             renderLearningGoals();
             renderAchievements();
+            renderPersonalCalendar();
+            renderBookmarks();
         });
     </script>
 </body>
