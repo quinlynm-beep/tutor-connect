@@ -1,0 +1,3084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Connect - Student Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #475569;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border);
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-content.large {
+            max-width: 900px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* User Profile Badge */
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-profile-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Avatar Picker Styles */
+        .avatar-picker {
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-picker label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+        }
+
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected::after {
+            content: '✓';
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(30, 41, 59, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                padding: 5rem 2rem 2rem;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                border-left: 1px solid var(--border);
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a.active::after {
+                bottom: 0;
+                left: -1rem;
+                width: 3px;
+                height: 100%;
+            }
+
+            .user-profile-badge {
+                margin-top: 2rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .stat-details h4 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-details p {
+            color: var(--text-secondary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        /* Session Cards */
+        .session-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .session-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .session-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .session-badge {
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-upcoming {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+        }
+
+        .badge-live {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .session-info {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .session-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Study Groups */
+        .group-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .group-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .group-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .group-info {
+            flex: 1;
+        }
+
+        .group-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .group-members {
+            display: flex;
+            margin: 1rem 0;
+        }
+
+        .member-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--bg-card);
+            margin-left: -10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .member-avatar:first-child {
+            margin-left: 0;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day.header {
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: default;
+            background: transparent;
+        }
+
+        .calendar-day.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day:not(.header):hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        /* Mobile Calendar Fix */
+        @media (max-width: 768px) {
+            .calendar-grid {
+                gap: 0.25rem;
+            }
+
+            .calendar-day {
+                font-size: 0.75rem;
+                padding: 0.25rem;
+            }
+
+            .group-meta {
+                font-size: 0.8rem;
+            }
+
+            .session-info {
+                gap: 0.75rem;
+            }
+
+            .session-info-item {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Comment Section */
+        .comment-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .comment-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .comment-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .comments-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .comments-container.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .comment-item {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .comment-time {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .comment-input button {
+            padding: 0.75rem 1.25rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .comment-input button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Activity Items */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h5 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-details p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Resource Section */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .resource-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .resource-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Download Button */
+        .btn-download {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .answer-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .answer-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .answer-option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .answer-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .quiz-score {
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+
+        .quiz-feedback {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Video Styles */
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        .play-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(99, 102, 241, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-icon:hover {
+            transform: scale(1.1);
+            background: var(--primary);
+        }
+
+        .video-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .video-details {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .video-details h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+            display: none;
+        }
+
+        .toast.active {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Popup for Live Stream */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2500;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--border);
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .popup-content h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .popup-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+                width: 95%;
+            }
+
+            .avatar-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .popup-content {
+                padding: 2rem;
+            }
+
+            .popup-icon {
+                font-size: 3rem;
+            }
+        }
+
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Booked Session Badge */
+        .badge-booked {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        /* Hide desktop nav items on mobile when menu is open */
+        @media (max-width: 768px) {
+            .nav-links.active ~ .user-profile-badge {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎓</span>
+                TutorConnect
+            </div>
+            
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('sessions')">Sessions</a></li>
+                <li><a href="#" onclick="showSection('groups')">Study Groups</a></li>
+                <li><a href="#" onclick="showSection('resources')">Resources</a></li>
+                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <div class="user-profile-badge" onclick="showSection('profile')" style="display: flex;">
+                    <div class="user-avatar" id="navAvatar">👤</div>
+                    <span id="navUsername">Guest</span>
+                </div>
+            </ul>
+
+            <div class="user-profile-badge" onclick="showSection('profile')" style="display: none;" id="desktopProfile">
+                <div class="user-avatar" id="desktopNavAvatar">👤</div>
+                <span id="desktopNavUsername">Guest</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 1rem;">Welcome back, <span id="welcomeName">Student</span>! 👋</h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem;">Here's what's happening with your learning today</p>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">📚</div>
+                    <div class="stat-details">
+                        <h4 id="totalSessions">0</h4>
+                        <p>Total Sessions</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">✅</div>
+                    <div class="stat-details">
+                        <h4 id="completedSessions">0</h4>
+                        <p>Completed</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--accent);">📊</div>
+                    <div class="stat-details">
+                        <h4 id="avgQuizScore">0%</h4>
+                        <p>Avg Quiz Score</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(6, 182, 212, 0.2); color: var(--secondary);">🎯</div>
+                    <div class="stat-details">
+                        <h4 id="studyStreak">0</h4>
+                        <p>Day Streak</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div style="margin-top: 3rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activities</h3>
+                    </div>
+                    <div id="recentActivities"></div>
+                </div>
+            </div>
+
+            <!-- Learning Goals -->
+            <div style="margin-top: 2rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Learning Goals</h3>
+                    </div>
+                    <div id="learningGoals"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sessions Section -->
+        <section id="sessions" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem;">Tutoring Sessions</h1>
+                <button class="btn btn-primary" onclick="openBookingModal()">📅 Book New Session</button>
+            </div>
+
+            <div id="sessionsContainer"></div>
+        </section>
+
+        <!-- Study Groups Section -->
+        <section id="groups" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem;">Peer Learning Groups</h1>
+                <button class="btn btn-primary" onclick="openCreateGroupModal()">➕ Create Group</button>
+            </div>
+
+            <div id="studyGroupsContainer"></div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="section">
+            <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 2rem;">Learning Resources</h1>
+
+            <div class="resource-grid">
+                <!-- Mathematics Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">📐</div>
+                        <div class="resource-info">
+                            <h4>Algebra Basics</h4>
+                            <p>Complete guide with examples</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('Algebra Basics', 'algebra')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="startQuiz('algebra')">📝 Take Quiz</button>
+                    </div>
+                </div>
+
+                <!-- Science Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">🔬</div>
+                        <div class="resource-info">
+                            <h4>Chemistry 101</h4>
+                            <p>Periodic table & reactions</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('Chemistry 101', 'chemistry')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="startQuiz('chemistry')">📝 Take Quiz</button>
+                    </div>
+                </div>
+
+                <!-- English Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--accent);">📖</div>
+                        <div class="resource-info">
+                            <h4>English Grammar</h4>
+                            <p>Grammar rules simplified</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('English Grammar', 'english')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="startQuiz('english')">📝 Take Quiz</button>
+                    </div>
+                </div>
+
+                <!-- History Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(6, 182, 212, 0.2); color: var(--secondary);">🏛️</div>
+                        <div class="resource-info">
+                            <h4>World History</h4>
+                            <p>Major events & timelines</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('World History', 'history')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="startQuiz('history')">📝 Take Quiz</button>
+                    </div>
+                </div>
+
+                <!-- Biology Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">🧬</div>
+                        <div class="resource-info">
+                            <h4>Biology Fundamentals</h4>
+                            <p>Cell structure & processes</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('Biology Fundamentals', 'biology')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="startQuiz('biology')">📝 Take Quiz</button>
+                    </div>
+                </div>
+
+                <!-- Physics Resources -->
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">⚛️</div>
+                        <div class="resource-info">
+                            <h4>Physics Concepts</h4>
+                            <p>Motion, energy & forces</p>
+                        </div>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-download btn-sm" onclick="downloadMaterial('Physics Concepts', 'physics')">📥 Download</button>
+                        <button class="btn btn-secondary btn-sm" onclick="openVideo('Physics Concepts')">▶️ Watch</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatarPreviewIcon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    😊
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Guest User</h2>
+                    <p style="color: var(--text-secondary);" id="profileEmail">guest@tutorconnect.com</p>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileTotalSessions">0</div>
+                            <div class="profile-stat-label">Sessions</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileQuizScore">0%</div>
+                            <div class="profile-stat-label">Avg Score</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileStreak">0</div>
+                            <div class="profile-stat-label">Day Streak</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="openProfileEditModal()">✏️ Edit Profile</button>
+            </div>
+
+            <!-- Achievements -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Achievements 🏆</h3>
+                </div>
+                <div id="profileAchievements"></div>
+            </div>
+
+            <!-- Learning Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Learning Progress</h3>
+                </div>
+                <div id="profileProgress"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal active">
+        <div class="modal-content">
+            <h2>Welcome to TutorConnect! 🎓</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Let's set up your profile to get started</p>
+            
+            <div class="avatar-picker">
+                <label>Choose Your Avatar</label>
+                <div class="avatar-grid" id="signupAvatarGrid"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="signupName" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="signupEmail" placeholder="your.email@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Grade Level</label>
+                <select id="signupGrade">
+                    <option value="9">9th Grade</option>
+                    <option value="10">10th Grade</option>
+                    <option value="11">11th Grade</option>
+                    <option value="12">12th Grade</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="completeSignup()">🚀 Get Started</button>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeBookingModal()">×</button>
+            <h2>Book a Session</h2>
+
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="bookSubject">
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="History">History</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tutor</label>
+                <select id="bookTutor">
+                    <option value="Dr. Sarah Johnson">Dr. Sarah Johnson</option>
+                    <option value="Prof. Michael Chen">Prof. Michael Chen</option>
+                    <option value="Ms. Emily Rodriguez">Ms. Emily Rodriguez</option>
+                    <option value="Mr. David Kim">Mr. David Kim</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="bookDate">
+            </div>
+
+            <div class="form-group">
+                <label>Time</label>
+                <input type="time" id="bookTime">
+            </div>
+
+            <div class="form-group">
+                <label>Topic/Notes (Optional)</label>
+                <textarea id="bookNotes" placeholder="What would you like to focus on?"></textarea>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="confirmBooking()">📅 Confirm Booking</button>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileEditModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileEditModal()">×</button>
+            <h2>Edit Profile</h2>
+
+            <div class="avatar-picker">
+                <label>Choose Your Avatar</label>
+                <div class="avatar-grid" id="profileAvatarGrid"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="editName">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editEmail">
+            </div>
+
+            <div class="form-group">
+                <label>Grade Level</label>
+                <select id="editGrade">
+                    <option value="9">9th Grade</option>
+                    <option value="10">10th Grade</option>
+                    <option value="11">11th Grade</option>
+                    <option value="12">12th Grade</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="saveProfile()">💾 Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Create Group Modal -->
+    <div id="createGroupModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCreateGroupModal()">×</button>
+            <h2>Create Study Group</h2>
+
+            <div class="form-group">
+                <label>Group Name</label>
+                <input type="text" id="groupName" placeholder="e.g., Algebra Study Squad">
+            </div>
+
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="groupSubject">
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="History">History</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Meeting Days (Select multiple)</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <input type="checkbox" name="groupDays" value="Mon"> Mon
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <input type="checkbox" name="groupDays" value="Tue"> Tue
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <input type="checkbox" name="groupDays" value="Wed"> Wed
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <input type="checkbox" name="groupDays" value="Thu"> Thu
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <input type="checkbox" name="groupDays" value="Fri"> Fri
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Meeting Time</label>
+                <input type="time" id="groupTime">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="groupDescription" placeholder="What will your group focus on?"></textarea>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="createGroup()">✨ Create Group</button>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeQuizModal()">×</button>
+            <div id="quizContent"></div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeVideoModal()">×</button>
+            <div id="videoContent"></div>
+        </div>
+    </div>
+
+    <!-- Live Stream Popup -->
+    <div id="livePopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-icon">🎥</div>
+            <h3>Live Session Starting Soon!</h3>
+            <p>The tutor will begin the session shortly. Please wait...</p>
+            <button class="btn btn-primary" onclick="closeLivePopup()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Avatar data
+        const avatars = [
+            { id: 1, emoji: '😊', bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', name: 'Happy' },
+            { id: 2, emoji: '🤓', bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', name: 'Nerdy' },
+            { id: 3, emoji: '😎', bg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', name: 'Cool' },
+            { id: 4, emoji: '🌟', bg: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', name: 'Star' },
+            { id: 5, emoji: '🚀', bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', name: 'Rocket' },
+            { id: 6, emoji: '🎨', bg: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)', name: 'Artist' },
+            { id: 7, emoji: '🎵', bg: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', name: 'Music' },
+            { id: 8, emoji: '⚡', bg: 'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)', name: 'Lightning' },
+            { id: 9, emoji: '🌈', bg: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', name: 'Rainbow' },
+            { id: 10, emoji: '🎯', bg: 'linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%)', name: 'Target' },
+            { id: 11, emoji: '💡', bg: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)', name: 'Idea' },
+            { id: 12, emoji: '🏆', bg: 'linear-gradient(135deg, #f77062 0%, #fe5196 100%)', name: 'Trophy' }
+        ];
+
+        let selectedAvatarId = 1;
+
+        // User Data
+        let userData = {
+            name: '',
+            email: '',
+            grade: '10',
+            avatarId: 1,
+            totalSessions: 0,
+            completedSessions: 0,
+            quizScores: [],
+            avgQuizScore: 0,
+            studyStreak: 0
+        };
+
+        // Sessions Data
+        let sessions = [
+            {
+                id: 1,
+                subject: 'Mathematics',
+                tutor: 'Dr. Sarah Johnson',
+                date: 'Feb 16, 2026',
+                time: '3:00 PM',
+                status: 'upcoming',
+                topic: 'Quadratic Equations',
+                booked: false
+            },
+            {
+                id: 2,
+                subject: 'Science',
+                tutor: 'Prof. Michael Chen',
+                date: 'Feb 17, 2026',
+                time: '4:30 PM',
+                status: 'upcoming',
+                topic: 'Chemical Bonding',
+                booked: false
+            },
+            {
+                id: 3,
+                subject: 'English',
+                tutor: 'Ms. Emily Rodriguez',
+                date: 'Feb 15, 2026',
+                time: '2:00 PM',
+                status: 'live',
+                topic: 'Essay Writing',
+                booked: false
+            }
+        ];
+
+        // Study Groups Data
+        let studyGroups = [
+            {
+                id: 1,
+                name: 'Algebra Warriors',
+                subject: 'Mathematics',
+                members: 8,
+                meetDays: ['Mon', 'Wed', 'Fri'],
+                time: '5:00 PM',
+                icon: '📐',
+                iconBg: 'rgba(99, 102, 241, 0.2)'
+            },
+            {
+                id: 2,
+                name: 'Science Squad',
+                subject: 'Science',
+                members: 12,
+                meetDays: ['Tue', 'Thu'],
+                time: '4:00 PM',
+                icon: '🔬',
+                iconBg: 'rgba(16, 185, 129, 0.2)'
+            },
+            {
+                id: 3,
+                name: 'Literature Club',
+                subject: 'English',
+                members: 6,
+                meetDays: ['Mon', 'Thu'],
+                time: '6:00 PM',
+                icon: '📚',
+                iconBg: 'rgba(245, 158, 11, 0.2)'
+            }
+        ];
+
+        // Activities Data
+        const activities = [
+            {
+                icon: '✅',
+                title: 'Completed Algebra Quiz',
+                detail: 'Scored 95% on Quadratic Equations',
+                iconBg: 'rgba(16, 185, 129, 0.2)',
+                iconColor: 'var(--success)'
+            },
+            {
+                icon: '📚',
+                title: 'Started New Topic',
+                detail: 'Chemical Bonding in Chemistry',
+                iconBg: 'rgba(99, 102, 241, 0.2)',
+                iconColor: 'var(--primary)'
+            },
+            {
+                icon: '👥',
+                title: 'Joined Study Group',
+                detail: 'Algebra Warriors - Next meet: Monday',
+                iconBg: 'rgba(245, 158, 11, 0.2)',
+                iconColor: 'var(--accent)'
+            }
+        ];
+
+        // Learning Goals Data
+        const learningGoals = [
+            {
+                title: 'Master Algebra',
+                detail: '8 of 10 topics completed',
+                progress: 80,
+                gradient: 'var(--gradient-1)'
+            },
+            {
+                title: 'Chemistry Fundamentals',
+                detail: '5 of 8 topics completed',
+                progress: 62,
+                gradient: 'var(--gradient-3)'
+            },
+            {
+                title: 'English Literature',
+                detail: '3 of 6 books read',
+                progress: 50,
+                gradient: 'var(--gradient-2)'
+            }
+        ];
+
+        // Achievements Data
+        const achievements = [
+            { icon: '🏆', name: 'First Quiz Ace', description: 'Scored 100% on your first quiz' },
+            { icon: '🔥', name: '7-Day Streak', description: 'Logged in for 7 days straight' },
+            { icon: '📚', name: 'Bookworm', description: 'Completed 10 reading assignments' },
+            { icon: '👥', name: 'Social Learner', description: 'Joined 3 study groups' }
+        ];
+
+        // Quiz Data
+        const quizzes = {
+            algebra: {
+                title: 'Algebra Basics Quiz',
+                questions: [
+                    {
+                        question: 'What is the value of x in: 2x + 5 = 13?',
+                        options: ['x = 3', 'x = 4', 'x = 5', 'x = 6'],
+                        correct: 1
+                    },
+                    {
+                        question: 'Simplify: 3(x + 2) = ?',
+                        options: ['3x + 2', '3x + 6', 'x + 6', '3x + 5'],
+                        correct: 1
+                    },
+                    {
+                        question: 'What is the slope of y = 2x + 3?',
+                        options: ['2', '3', '2/3', '3/2'],
+                        correct: 0
+                    }
+                ]
+            },
+            chemistry: {
+                title: 'Chemistry 101 Quiz',
+                questions: [
+                    {
+                        question: 'What is the chemical symbol for Gold?',
+                        options: ['Go', 'Au', 'Gd', 'Ag'],
+                        correct: 1
+                    },
+                    {
+                        question: 'How many protons does Carbon have?',
+                        options: ['4', '6', '8', '12'],
+                        correct: 1
+                    },
+                    {
+                        question: 'What is H2O commonly known as?',
+                        options: ['Oxygen', 'Hydrogen', 'Water', 'Acid'],
+                        correct: 2
+                    }
+                ]
+            },
+            english: {
+                title: 'English Grammar Quiz',
+                questions: [
+                    {
+                        question: 'Which is the correct spelling?',
+                        options: ['Definately', 'Definitly', 'Definitely', 'Definatley'],
+                        correct: 2
+                    },
+                    {
+                        question: 'What is a noun?',
+                        options: ['Action word', 'Describing word', 'Person/place/thing', 'Connecting word'],
+                        correct: 2
+                    },
+                    {
+                        question: 'Which sentence is correct?',
+                        options: ['Their going home', 'There going home', "They're going home", 'Theyre going home'],
+                        correct: 2
+                    }
+                ]
+            },
+            history: {
+                title: 'World History Quiz',
+                questions: [
+                    {
+                        question: 'In which year did World War II end?',
+                        options: ['1943', '1944', '1945', '1946'],
+                        correct: 2
+                    },
+                    {
+                        question: 'Who was the first President of the United States?',
+                        options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Benjamin Franklin'],
+                        correct: 1
+                    },
+                    {
+                        question: 'The Renaissance began in which country?',
+                        options: ['France', 'Spain', 'Italy', 'England'],
+                        correct: 2
+                    }
+                ]
+            },
+            biology: {
+                title: 'Biology Fundamentals Quiz',
+                questions: [
+                    {
+                        question: 'What is the powerhouse of the cell?',
+                        options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Chloroplast'],
+                        correct: 1
+                    },
+                    {
+                        question: 'DNA stands for?',
+                        options: ['Deoxyribonucleic Acid', 'Dinitrogen Acid', 'Double Nucleus Acid', 'Deoxynitric Acid'],
+                        correct: 0
+                    },
+                    {
+                        question: 'Which blood type is the universal donor?',
+                        options: ['A+', 'B+', 'AB+', 'O-'],
+                        correct: 3
+                    }
+                ]
+            }
+        };
+
+        let currentQuiz = null;
+        let currentQuestion = 0;
+        let quizAnswers = [];
+
+        // Group Comments Data (simulated)
+        const groupComments = {
+            1: [
+                { author: '🤓 Alex', time: '2h ago', text: 'Anyone up for a practice session this weekend?' },
+                { author: '😊 Sarah', time: '1h ago', text: "I'm in! Let's do Saturday morning!" }
+            ],
+            2: [
+                { author: '🌟 Mike', time: '3h ago', text: 'Check out this cool experiment video I found!' },
+                { author: '🚀 Emma', time: '2h ago', text: 'Thanks! That explains it so much better!' }
+            ],
+            3: [
+                { author: '📚 Jordan', time: '5h ago', text: 'Has everyone finished reading Chapter 5?' },
+                { author: '🎨 Riley', time: '4h ago', text: 'Almost done! Great chapter so far.' }
+            ]
+        };
+
+        // Navigation Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+
+            // Update active nav link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Close mobile menu
+            closeMobileMenu();
+
+            // Animate progress bars if on dashboard or profile
+            if (sectionName === 'dashboard' || sectionName === 'profile') {
+                setTimeout(animateProgressBars, 100);
+            }
+        }
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+
+        // Signup Functions
+        function completeSignup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const grade = document.getElementById('signupGrade').value;
+
+            if (!name || !email) {
+                showToast('Please fill in all fields');
+                return;
+            }
+
+            userData.name = name;
+            userData.email = email;
+            userData.grade = grade;
+            userData.avatarId = selectedAvatarId;
+            userData.studyStreak = Math.floor(Math.random() * 15) + 1;
+
+            document.getElementById('signupModal').classList.remove('active');
+            updateUI();
+            showToast('Welcome to TutorConnect! 🎉');
+        }
+
+        // Update UI
+        function updateUI() {
+            const avatar = avatars.find(a => a.id === userData.avatarId);
+
+            // Update nav
+            document.getElementById('navUsername').textContent = userData.name || 'Guest';
+            document.getElementById('navAvatar').innerHTML = avatar.emoji;
+            document.getElementById('navAvatar').style.background = avatar.bg;
+
+            document.getElementById('desktopNavUsername').textContent = userData.name || 'Guest';
+            document.getElementById('desktopNavAvatar').innerHTML = avatar.emoji;
+            document.getElementById('desktopNavAvatar').style.background = avatar.bg;
+
+            // Update dashboard
+            document.getElementById('welcomeName').textContent = userData.name || 'Student';
+            document.getElementById('totalSessions').textContent = userData.totalSessions;
+            document.getElementById('completedSessions').textContent = userData.completedSessions;
+            document.getElementById('avgQuizScore').textContent = userData.avgQuizScore + '%';
+            document.getElementById('studyStreak').textContent = userData.studyStreak;
+
+            // Update profile
+            document.getElementById('profileName').textContent = userData.name || 'Guest User';
+            document.getElementById('profileEmail').textContent = userData.email || 'guest@tutorconnect.com';
+            document.getElementById('profileTotalSessions').textContent = userData.totalSessions;
+            document.getElementById('profileQuizScore').textContent = userData.avgQuizScore + '%';
+            document.getElementById('profileStreak').textContent = userData.studyStreak;
+            document.getElementById('profileAvatarPreviewIcon').innerHTML = avatar.emoji;
+            document.getElementById('profileAvatarPreviewIcon').style.background = avatar.bg;
+
+            // Show desktop profile badge
+            document.getElementById('desktopProfile').style.display = 'flex';
+        }
+
+        // Booking Functions
+        function openBookingModal() {
+            document.getElementById('bookingModal').classList.add('active');
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookDate').min = today;
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.remove('active');
+        }
+
+        function confirmBooking() {
+            const subject = document.getElementById('bookSubject').value;
+            const tutor = document.getElementById('bookTutor').value;
+            const date = document.getElementById('bookDate').value;
+            const time = document.getElementById('bookTime').value;
+            const notes = document.getElementById('bookNotes').value;
+
+            if (!date || !time) {
+                showToast('Please select date and time');
+                return;
+            }
+
+            // Format date
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            // Format time
+            const timeObj = new Date('1970-01-01T' + time);
+            const formattedTime = timeObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            // Add new session
+            const newSession = {
+                id: sessions.length + 1,
+                subject: subject,
+                tutor: tutor,
+                date: formattedDate,
+                time: formattedTime,
+                status: 'upcoming',
+                topic: notes || 'General tutoring',
+                booked: true
+            };
+
+            sessions.unshift(newSession);
+            userData.totalSessions++;
+
+            closeBookingModal();
+            renderSessions();
+            updateUI();
+            showToast('Session booked successfully! 📅');
+
+            // Clear form
+            document.getElementById('bookDate').value = '';
+            document.getElementById('bookTime').value = '';
+            document.getElementById('bookNotes').value = '';
+        }
+
+        // Profile Edit Functions
+        function openProfileEditModal() {
+            // Check if user is still a guest
+            if (!userData.name || userData.name === '' || userData.email === 'guest@tutorconnect.com' || userData.email === '') {
+                showToast('⚠️ Please complete signup first to edit your profile');
+                // Open signup modal instead
+                document.getElementById('signupModal').classList.add('active');
+                return;
+            }
+
+            document.getElementById('editName').value = userData.name;
+            document.getElementById('editEmail').value = userData.email;
+            document.getElementById('editGrade').value = userData.grade;
+            
+            renderAvatarGrid('profileAvatarGrid', selectProfileAvatar, userData.avatarId);
+            
+            document.getElementById('profileEditModal').classList.add('active');
+        }
+
+        function closeProfileEditModal() {
+            document.getElementById('profileEditModal').classList.remove('active');
+        }
+
+        function saveProfile() {
+            userData.name = document.getElementById('editName').value;
+            userData.email = document.getElementById('editEmail').value;
+            userData.grade = document.getElementById('editGrade').value;
+
+            closeProfileEditModal();
+            updateUI();
+            showToast('Profile updated successfully! ✅');
+        }
+
+        // Create Group Functions
+        function openCreateGroupModal() {
+            document.getElementById('createGroupModal').classList.add('active');
+        }
+
+        function closeCreateGroupModal() {
+            document.getElementById('createGroupModal').classList.remove('active');
+        }
+
+        function createGroup() {
+            const name = document.getElementById('groupName').value;
+            const subject = document.getElementById('groupSubject').value;
+            const time = document.getElementById('groupTime').value;
+            const description = document.getElementById('groupDescription').value;
+
+            const selectedDays = [];
+            document.querySelectorAll('input[name="groupDays"]:checked').forEach(checkbox => {
+                selectedDays.push(checkbox.value);
+            });
+
+            if (!name || selectedDays.length === 0 || !time) {
+                showToast('Please fill in all required fields');
+                return;
+            }
+
+            // Format time
+            const timeObj = new Date('1970-01-01T' + time);
+            const formattedTime = timeObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            // Icon mapping
+            const iconMap = {
+                'Mathematics': { icon: '📐', bg: 'rgba(99, 102, 241, 0.2)' },
+                'Science': { icon: '🔬', bg: 'rgba(16, 185, 129, 0.2)' },
+                'English': { icon: '📚', bg: 'rgba(245, 158, 11, 0.2)' },
+                'History': { icon: '🏛️', bg: 'rgba(6, 182, 212, 0.2)' },
+                'Physics': { icon: '⚛️', bg: 'rgba(99, 102, 241, 0.2)' },
+                'Chemistry': { icon: '🧪', bg: 'rgba(16, 185, 129, 0.2)' }
+            };
+
+            const newGroup = {
+                id: studyGroups.length + 1,
+                name: name,
+                subject: subject,
+                members: 1,
+                meetDays: selectedDays,
+                time: formattedTime,
+                icon: iconMap[subject].icon,
+                iconBg: iconMap[subject].bg
+            };
+
+            studyGroups.unshift(newGroup);
+
+            closeCreateGroupModal();
+            renderStudyGroups();
+            showToast('Study group created successfully! 🎉');
+
+            // Clear form
+            document.getElementById('groupName').value = '';
+            document.getElementById('groupTime').value = '';
+            document.getElementById('groupDescription').value = '';
+            document.querySelectorAll('input[name="groupDays"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        // Show Live Popup
+        function showLivePopup() {
+            document.getElementById('livePopup').classList.add('active');
+        }
+
+        function closeLivePopup() {
+            document.getElementById('livePopup').classList.remove('active');
+        }
+
+        // Download Material Function
+        function downloadMaterial(title, subject) {
+            // Create content for the material
+            const content = generateMaterialContent(title, subject);
+            
+            // Create a blob with the content
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create download link
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title.replace(/\s+/g, '_')}_Study_Guide.txt`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showToast(`Downloaded: ${title} 📥`);
+        }
+
+        function generateMaterialContent(title, subject) {
+            const materials = {
+                'algebra': `ALGEBRA BASICS - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Linear Equations
+   - Solving for x: ax + b = c
+   - Example: 2x + 5 = 13
+     Step 1: Subtract 5 from both sides → 2x = 8
+     Step 2: Divide by 2 → x = 4
+
+2. Quadratic Equations
+   - Standard form: ax² + bx + c = 0
+   - Quadratic formula: x = (-b ± √(b²-4ac)) / 2a
+
+3. Slope and Linear Functions
+   - Slope formula: m = (y₂-y₁)/(x₂-x₁)
+   - Slope-intercept form: y = mx + b
+
+PRACTICE PROBLEMS:
+------------------
+1. Solve: 3x - 7 = 11
+2. Find slope: points (2,3) and (4,7)
+3. Expand: (x+3)(x-2)
+
+TIPS FOR SUCCESS:
+-----------------
+- Always show your work step by step
+- Check your answers by substituting back
+- Practice regularly to build confidence
+
+© TutorConnect 2026`,
+
+                'chemistry': `CHEMISTRY 101 - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Periodic Table Basics
+   - Elements organized by atomic number
+   - Groups (columns) share properties
+   - Periods (rows) show electron shells
+
+2. Chemical Bonding
+   - Ionic bonds: transfer of electrons
+   - Covalent bonds: sharing of electrons
+   - Metallic bonds: electron sea model
+
+3. Common Elements & Symbols
+   - H = Hydrogen, O = Oxygen
+   - C = Carbon, N = Nitrogen
+   - Au = Gold, Ag = Silver, Fe = Iron
+
+PRACTICE QUESTIONS:
+-------------------
+1. What is the atomic number of Carbon?
+2. Name the noble gases
+3. Balance: H₂ + O₂ → H₂O
+
+LAB SAFETY REMINDERS:
+---------------------
+- Always wear safety goggles
+- Handle chemicals with care
+- Follow proper disposal procedures
+
+© TutorConnect 2026`,
+
+                'english': `ENGLISH GRAMMAR - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Parts of Speech
+   - Nouns: person, place, thing, or idea
+   - Verbs: action or state of being
+   - Adjectives: describe nouns
+   - Adverbs: describe verbs, adjectives
+
+2. Common Grammar Rules
+   - Subject-verb agreement
+   - Proper comma usage
+   - There/Their/They're distinction
+
+3. Writing Tips
+   - Start with an outline
+   - Use topic sentences
+   - Proofread multiple times
+
+COMMON MISTAKES:
+----------------
+- Its vs It's (possession vs contraction)
+- Your vs You're (possession vs "you are")
+- Affect vs Effect (verb vs noun)
+
+PRACTICE EXERCISES:
+-------------------
+1. Identify parts of speech in a sentence
+2. Correct common errors
+3. Write a paragraph using varied sentence structure
+
+© TutorConnect 2026`,
+
+                'history': `WORLD HISTORY - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Major Historical Periods
+   - Ancient Civilizations (3000 BCE - 500 CE)
+   - Middle Ages (500 - 1500 CE)
+   - Renaissance (1400 - 1600)
+   - Modern Era (1600 - Present)
+
+2. Important Events
+   - World War I (1914-1918)
+   - World War II (1939-1945)
+   - Cold War (1947-1991)
+
+3. Key Figures
+   - Political leaders and their impact
+   - Inventors and innovators
+   - Social reformers
+
+TIMELINE TIPS:
+--------------
+- Create visual timelines
+- Connect events across regions
+- Understand cause and effect
+
+STUDY STRATEGIES:
+-----------------
+- Use mnemonic devices for dates
+- Make connections to current events
+- Watch documentaries for context
+
+© TutorConnect 2026`,
+
+                'biology': `BIOLOGY FUNDAMENTALS - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Cell Structure
+   - Nucleus: contains DNA
+   - Mitochondria: energy production
+   - Cell membrane: controls what enters/exits
+   - Ribosomes: protein synthesis
+
+2. Photosynthesis
+   - Formula: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂
+   - Occurs in chloroplasts
+   - Produces glucose and oxygen
+
+3. DNA & Genetics
+   - DNA structure: double helix
+   - Base pairs: A-T and G-C
+   - Genes code for proteins
+
+PRACTICE QUESTIONS:
+-------------------
+1. What is the function of mitochondria?
+2. Name the stages of cell division
+3. Explain dominant vs recessive traits
+
+STUDY TIPS:
+-----------
+- Draw and label diagrams
+- Use flashcards for terminology
+- Relate concepts to real-world examples
+
+© TutorConnect 2026`,
+
+                'physics': `PHYSICS CONCEPTS - STUDY GUIDE
+========================================
+
+Topic: ${title}
+
+KEY CONCEPTS:
+-------------
+1. Motion and Forces
+   - Newton's Laws of Motion
+   - Force = Mass × Acceleration (F = ma)
+   - Velocity vs Acceleration
+
+2. Energy Types
+   - Kinetic Energy: KE = ½mv²
+   - Potential Energy: PE = mgh
+   - Conservation of Energy
+
+3. Waves and Light
+   - Wave properties: frequency, wavelength
+   - Speed of light: 3×10⁸ m/s
+   - Electromagnetic spectrum
+
+FORMULAS TO MEMORIZE:
+---------------------
+- Distance = Speed × Time
+- Work = Force × Distance
+- Power = Work / Time
+
+PROBLEM-SOLVING TIPS:
+---------------------
+- Draw diagrams for each problem
+- List known and unknown variables
+- Check units in your final answer
+
+© TutorConnect 2026`
+            };
+
+            return materials[subject] || `${title} - Study Guide\n\nContent coming soon!\n\n© TutorConnect 2026`;
+        }
+
+        // Toggle Comments
+        function toggleComments(groupId) {
+            const container = document.getElementById(`comments-${groupId}`);
+            container.classList.toggle('active');
+
+            // Load comments if not already loaded
+            if (container.classList.contains('active') && container.children.length === 0) {
+                renderComments(groupId);
+            }
+        }
+
+        function renderComments(groupId) {
+            const container = document.getElementById(`comments-${groupId}`);
+            const comments = groupComments[groupId] || [];
+
+            let html = '';
+            comments.forEach(comment => {
+                html += `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <div class="comment-avatar" style="background: var(--gradient-1);">${comment.author.split(' ')[0]}</div>
+                            <span class="comment-author">${comment.author.split(' ')[1]}</span>
+                            <span class="comment-time">${comment.time}</span>
+                        </div>
+                        <div class="comment-text">${comment.text}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="comment-input">
+                    <input type="text" placeholder="Write a reply..." id="newComment-${groupId}">
+                    <button onclick="addComment(${groupId})">Post</button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function addComment(groupId) {
+            const input = document.getElementById(`newComment-${groupId}`);
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const avatar = avatars.find(a => a.id === userData.avatarId);
+            const newComment = {
+                author: `${avatar.emoji} ${userData.name.split(' ')[0]}`,
+                time: 'Just now',
+                text: text
+            };
+
+            if (!groupComments[groupId]) {
+                groupComments[groupId] = [];
+            }
+            groupComments[groupId].push(newComment);
+
+            renderComments(groupId);
+            showToast('Comment posted! 💬');
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('active');
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Render Sessions
+        function renderSessions() {
+            const container = document.getElementById('sessionsContainer');
+            let html = '';
+
+            sessions.forEach(session => {
+                const badgeClass = session.status === 'live' ? 'badge-live' : (session.booked ? 'badge-booked' : 'badge-upcoming');
+                const badgeText = session.status === 'live' ? '🔴 Live Now' : (session.booked ? '✅ Booked' : '📅 Upcoming');
+
+                html += `
+                    <div class="session-card">
+                        <div class="session-header">
+                            <h3 style="font-size: 1.5rem;">${session.subject}</h3>
+                            <span class="session-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="session-info">
+                            <div class="session-info-item">
+                                👨‍🏫 ${session.tutor}
+                            </div>
+                            <div class="session-info-item">
+                                📅 ${session.date}
+                            </div>
+                            <div class="session-info-item">
+                                🕐 ${session.time}
+                            </div>
+                            <div class="session-info-item">
+                                📚 ${session.topic}
+                            </div>
+                        </div>
+                        <div class="session-actions">
+                            ${session.status === 'live' ? 
+                                '<button class="btn btn-primary" onclick="showLivePopup()">🎥 Join Now</button>' : 
+                                '<button class="btn btn-secondary">📝 View Details</button>'
+                            }
+                            ${session.status !== 'live' ? '<button class="btn btn-secondary">✏️ Edit</button>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Study Groups
+        function renderStudyGroups() {
+            const container = document.getElementById('studyGroupsContainer');
+            let html = '';
+
+            studyGroups.forEach(group => {
+                // Generate calendar for the current month
+                const today = new Date();
+                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+                const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+
+                html += `
+                    <div class="group-card">
+                        <div class="group-header">
+                            <div class="group-icon" style="background: ${group.iconBg};">${group.icon}</div>
+                            <div class="group-info">
+                                <h4>${group.name}</h4>
+                                <div class="group-meta">
+                                    <span>📚 ${group.subject}</span>
+                                    <span>👥 ${group.members} members</span>
+                                    <span>🕐 ${group.time}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="group-members">
+                            ${Array(Math.min(5, group.members)).fill(0).map((_, i) => {
+                                const memberAvatar = avatars[i % avatars.length];
+                                return `<div class="member-avatar" style="background: ${memberAvatar.bg};">${memberAvatar.emoji}</div>`;
+                            }).join('')}
+                            ${group.members > 5 ? `<div class="member-avatar" style="background: rgba(255,255,255,0.1);">+${group.members - 5}</div>` : ''}
+                        </div>
+
+                        <div style="margin: 1rem 0;">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                📅 Meets: ${group.meetDays.join(', ')}
+                            </p>
+                        </div>
+
+                        <div class="calendar-grid">
+                            <div class="calendar-day header">S</div>
+                            <div class="calendar-day header">M</div>
+                            <div class="calendar-day header">T</div>
+                            <div class="calendar-day header">W</div>
+                            <div class="calendar-day header">T</div>
+                            <div class="calendar-day header">F</div>
+                            <div class="calendar-day header">S</div>
+                            ${Array(startingDayOfWeek).fill(0).map(() => '<div class="calendar-day"></div>').join('')}
+                            ${Array(daysInMonth).fill(0).map((_, i) => {
+                                const day = i + 1;
+                                const date = new Date(today.getFullYear(), today.getMonth(), day);
+                                const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
+                                const isActive = group.meetDays.some(d => dayName.startsWith(d));
+                                return `<div class="calendar-day ${isActive ? 'active' : ''}">${day}</div>`;
+                            }).join('')}
+                        </div>
+
+                        <div class="comment-section">
+                            <button class="comment-button" onclick="toggleComments(${group.id})">
+                                💬 Comments (${(groupComments[group.id] || []).length})
+                            </button>
+                            <div class="comments-container" id="comments-${group.id}"></div>
+                        </div>
+
+                        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;">Join Group</button>
+                            <button class="btn btn-secondary" style="flex: 1;">View Details</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Quiz Functions
+        function startQuiz(quizType) {
+            currentQuiz = quizzes[quizType];
+            currentQuestion = 0;
+            quizAnswers = [];
+
+            if (!currentQuiz) {
+                showToast('Quiz not available');
+                return;
+            }
+
+            document.getElementById('quizModal').classList.add('active');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const quiz = currentQuiz;
+            const question = quiz.questions[currentQuestion];
+
+            const container = document.getElementById('quizContent');
+            container.innerHTML = `
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <h2>${quiz.title}</h2>
+                    </div>
+                    <div class="quiz-progress">
+                        <span>Question ${currentQuestion + 1} of ${quiz.questions.length}</span>
+                        <span>${Math.round(((currentQuestion) / quiz.questions.length) * 100)}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(currentQuestion / quiz.questions.length) * 100}%;"></div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text">${question.question}</div>
+                        <div class="options">
+                            ${question.options.map((option, i) => `
+                                <div class="answer-option" onclick="selectAnswer(${i})">
+                                    ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(index) {
+            const quiz = currentQuiz;
+            const question = quiz.questions[currentQuestion];
+            const options = document.querySelectorAll('.answer-option');
+
+            options.forEach((opt, i) => {
+                if (i === index) {
+                    opt.classList.add('selected');
+                    if (i === question.correct) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('incorrect');
+                    }
+                } else if (i === question.correct) {
+                    opt.classList.add('correct');
+                }
+                opt.style.pointerEvents = 'none';
+            });
+
+            quizAnswers.push(index);
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion >= currentQuiz.questions.length) {
+                    showQuizResults();
+                } else {
+                    renderQuizQuestion();
+                }
+            }, 1000);
+        }
+
+        function showQuizResults() {
+            const quiz = currentQuiz;
+            let correct = 0;
+            quizAnswers.forEach((ans, i) => {
+                if (ans === quiz.questions[i].correct) correct++;
+            });
+
+            const score = Math.round((correct / quiz.questions.length) * 100);
+            userData.quizScores.push(score);
+            userData.avgQuizScore = Math.round(userData.quizScores.reduce((a, b) => a + b, 0) / userData.quizScores.length);
+            updateUI();
+
+            let feedback = '';
+            if (score >= 90) feedback = 'Excellent work! You\'re a star!';
+            else if (score >= 70) feedback = 'Great job! Keep practicing!';
+            else if (score >= 50) feedback = 'Good effort! Review the material!';
+            else feedback = 'Keep studying! You\'ll improve!';
+
+            const container = document.getElementById('quizContent');
+            container.innerHTML = `
+                <div class="quiz-result">
+                    <h2>${quiz.title}</h2>
+                    <div class="quiz-score">${score}%</div>
+                    <p class="quiz-feedback">${feedback}</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">You got ${correct} out of ${quiz.questions.length} questions correct!</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn btn-secondary" onclick="closeQuizModal()">Close</button>
+                        <button class="btn btn-primary" onclick="startQuiz('${Object.keys(quizzes).find(k => quizzes[k] === quiz)}')">Try Again</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quizModal').classList.remove('active');
+            currentQuiz = null;
+        }
+
+        // Video Modal
+        function openVideo(title) {
+            const container = document.getElementById('videoContent');
+
+            container.innerHTML = `
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <div class="video-placeholder">
+                            <div class="play-icon">▶</div>
+                            <p style="color: var(--text-secondary);">Video Player</p>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-details">
+                            <h3>${title}</h3>
+                            <div class="video-meta">
+                                <span>📺 15:32</span>
+                                <span>👁 2.4k views</span>
+                                <span>📅 Jan 2026</span>
+                            </div>
+                            <p style="color: var(--text-secondary);">This educational video covers all the essential concepts you need to master this topic. Watch, learn, and practice!</p>
+                        </div>
+                        <div class="video-actions">
+                            <button class="btn btn-primary" onclick="showToast('Video bookmarked!')">Bookmark</button>
+                            <button class="btn btn-secondary" onclick="showToast('Notes feature coming soon!')">Take Notes</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+
+        // Render Activities
+        function renderActivities() {
+            const container = document.getElementById('recentActivities');
+            let html = '';
+
+            activities.forEach(activity => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: ${activity.iconBg}; color: ${activity.iconColor};">${activity.icon}</div>
+                        <div class="activity-details">
+                            <h5>${activity.title}</h5>
+                            <p>${activity.detail}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Learning Goals
+        function renderLearningGoals() {
+            const container = document.getElementById('learningGoals');
+            let html = '';
+
+            learningGoals.forEach(goal => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-details">
+                            <h5>${goal.title}</h5>
+                            <p>${goal.detail}</p>
+                            <div class="progress-bar" style="margin-top: 0.75rem;">
+                                <div class="progress-fill" style="width: ${goal.progress}%; ${goal.gradient ? `background: ${goal.gradient};` : ''}"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Achievements
+        function renderAchievements() {
+            const container = document.getElementById('profileAchievements');
+            let html = '';
+
+            achievements.forEach(achievement => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(99, 102, 241, 0.2); font-size: 1.5rem;">${achievement.icon}</div>
+                        <div class="activity-details">
+                            <h5>${achievement.name}</h5>
+                            <p>${achievement.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Animate Progress Bars
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }
+
+        // Close modals on click outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Initialize
+        // Avatar Functions
+        function renderAvatarGrid(containerId, onSelectCallback, selectedId = 1) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            let html = '';
+            avatars.forEach(avatar => {
+                const isSelected = avatar.id === selectedId;
+                html += `
+                    <div class="avatar-option ${isSelected ? 'selected' : ''}"
+                         style="background: ${avatar.bg};"
+                         data-avatar-id="${avatar.id}"
+                         onclick="${onSelectCallback.name}(${avatar.id})"
+                         title="${avatar.name}">
+                        ${avatar.emoji}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function selectSignupAvatar(avatarId) {
+            selectedAvatarId = avatarId;
+
+            // Update visual selection
+            document.querySelectorAll('#signupAvatarGrid .avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (parseInt(opt.dataset.avatarId) === avatarId) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+
+        function selectProfileAvatar(avatarId) {
+            userData.avatarId = avatarId;
+
+            // Update visual selection
+            document.querySelectorAll('#profileAvatarGrid .avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (parseInt(opt.dataset.avatarId) === avatarId) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            // Update preview
+            const avatar = avatars.find(a => a.id === avatarId);
+            const previewIcon = document.getElementById('profileAvatarPreviewIcon');
+            if (previewIcon && avatar) {
+                previewIcon.innerHTML = avatar.emoji;
+                previewIcon.style.background = avatar.bg;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render avatar grids
+            renderAvatarGrid('signupAvatarGrid', selectSignupAvatar, 1);
+
+            renderSessions();
+            renderStudyGroups();
+            renderActivities();
+            renderLearningGoals();
+            renderAchievements();
+        });
+    </script>
+</body>
+</html>
